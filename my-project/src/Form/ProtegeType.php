@@ -1,0 +1,50 @@
+<?php
+
+namespace App\Form;
+
+use App\Entity\Protege;
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
+
+
+class ProtegeType extends AbstractType
+{
+    public function buildForm(FormBuilderInterface $builder, array $options): void
+    {
+        $builder
+            ->add('name', TextType::class, [
+                'mapped' => false
+            ])
+            ->add('last_name', TextType::class, [
+                'mapped' => false
+            ])
+            ->add('email', EmailType::class, [
+                'mapped' => false
+            ])
+            ->add('password', RepeatedType::class, [
+                'type' => PasswordType::class,
+                'mapped' => false
+            ])
+            ->add('protector', EntityType::class, [
+                'class' => Protector::class,
+                //'choices' => $
+                'choice_label' => function ($protector) {
+                    return $protector->getName().' '.$protector->getLastName();
+                }
+            ])
+        ;
+    }
+
+    public function configureOptions(OptionsResolver $resolver): void
+    {
+        $resolver->setDefaults([
+            'data_class' => Protector::class,
+        ]);
+    }
+}

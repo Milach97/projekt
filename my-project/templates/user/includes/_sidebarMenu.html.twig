@@ -1,0 +1,63 @@
+<nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+  <div class="position-sticky pt-3 sidebar-sticky">
+    <ul class="nav flex-column">
+      <li class="nav-item">
+        <a class="nav-link {% if menuHighlight|default() == 'dashboard' %}active{% endif %}" aria-current="page" href="{{ path('admin_dashboard') }}">
+          <span data-feather="home" class="align-text-bottom"></span>
+          Panel główny
+        </a>
+      </li>
+      {% if is_granted('ROLE_ADMIN') %}
+      <li class="nav-item">
+        <a class="nav-link {% if menuHighlight|default() == 'protectors' %}active{% endif %}" href="{{ path('admin_protectors') }}">
+          <span data-feather="file" class="align-text-bottom"></span>
+          Opiekunowie
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link {% if menuHighlight|default() == 'proteges' %}active{% endif %}" href="{{ path('admin_proteges') }}">
+          <span data-feather="shopping-cart" class="align-text-bottom"></span>
+          Podopieczni
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link {% if menuHighlight|default() == 'users' %}active{% endif %}" href="{{ path('admin_users') }}">
+          <span data-feather="users" class="align-text-bottom"></span>
+          Użytkownicy
+        </a>
+      </li>
+      {% endif %}
+      <li class="nav-item">
+        <a class="nav-link {% if menuHighlight|default() == 'protectors' %}events{% endif %}" href="#">
+          <span data-feather="bar-chart-2" class="align-text-bottom"></span>
+          Zdarzenia
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link {% if menuHighlight|default() == 'statistics' %}active{% endif %}" href="#">
+          <span data-feather="layers" class="align-text-bottom"></span>
+          Statystyki
+        </a>
+      </li>
+
+      <li><br></li>
+      <li><br></li>
+      <hr>
+      <li class="nav-item">
+        <a class="nav-link sidebar-heading text-muted text-uppercase" href="#">
+          <span data-feather="user" class="align-text-bottom "></span>
+
+          {{ app.user.email ?? '' }}
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link sidebar-heading text-muted text-uppercase" href="{{ path('logout') }}">
+          <span data-feather="log-out" class="align-text-bottom"></span>
+          Wyloguj się
+        </a>
+      </li>
+    </ul>
+
+  </div>
+</nav>

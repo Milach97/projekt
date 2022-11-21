@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('assets/css/login.css') }}">
+{% endblock %}
+
+{% block menu %}{% endblock %}
+
+{% block main %}
+
+    {% if error %}
+        <div class="alert alert-danger">
+            {{ error.messageKey|trans(error.messageData, 'security') }}
+        </div>
+    {% endif %}
+
+    <form method="POST" action="{{ path('login') }}" class="form-signin">
+        <h1 class="h3 mb-3 font-weight-normal">Zaloguj się</h1>
+        <label for="inputEmail" class="sr-only">Email</label>
+        <input type="email" name="_email" id="inputEmail" class="form-control" placeholder="Adres E-mail" required autofocus>
+        <label for="inputPassword" class="sr-only">Hasło</label>
+        <input type="password" name="_password" id="inputPassword" class="form-control" placeholder="Hasło" required>
+        <div class="checkbox mb-3">
+            <label>
+                <input type="checkbox" name="_remember_me"> Zapamiętaj mnie
+            </label>
+        </div>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Zaloguj</button>
+        <p class="mt-5 mb-3 text-muted">&copy; 2022-2023 <a href="{{ path('main_page') }}">strona główna</a></p>
+
+        {#<input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}"/>#}
+    </form>
+{% endblock %}
+
+{% block footer %}{% endblock %}
