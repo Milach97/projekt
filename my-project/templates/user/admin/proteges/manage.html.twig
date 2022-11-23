@@ -1,1 +1,263 @@
-TODO
+{% extends 'user/base.html.twig' %}
+
+{% block additionalStyles %}
+    <style>
+        .row{
+            margin-top: 15px;
+            margin-bottom: 15px;
+            padding-top: 15px;
+            padding-bottom: 15px;
+        }
+    </style>
+{% endblock %}
+
+{% block main %}
+
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">Podopieczny {{ protege.user.name ?? '' }} {{ protege.user.lastName ?? ''}}</h1>
+        <div class="btn-toolbar mb-2 mb-md-0">
+          <div class="btn-group me-2">
+            <a class="btn btn-sm btn-outline-secondary" href="{{ path('admin_proteges') }}">
+              <span data-feather="list" class="align-text-bottom"></span>
+              Lista podopiecznych
+            </a>
+          </div>
+        </div>
+      </div>
+
+    <div class="row">
+        <div class="col-sm-6">
+            <h4>Podstawowe dane</h4>
+            <div class="table-responsive">
+                <table class="table table-striped table-sm">
+                    <tr>
+                        <th>Imię</th>
+                        <td colspan="2">{{ protege.user.name ?? '-' }}</td>
+                    </tr>
+                    <tr>
+                        <th>Nazwisko</th>
+                        <td colspan="2">{{ protege.user.lastName ?? '-' }}</td>
+                    </tr>                    
+                    <tr>
+                        <th>E-mail</th>
+                        <td colspan="2">{{ protege.user.email ?? '-' }}</td>
+                    </tr>                    
+                    <tr>
+                        <th>Nr telefonu</th>
+                        <td colspan="2">{{ protege.user.phoneNumber ?? '-' }}</td>
+                    </tr>
+                    <tr>
+                        <th>Płeć</th>
+                        <td colspan="2">
+                            {% if protege.gender|upper == 'MALE' %}
+                                Mężczyzna
+                            {% elseif protege.gender|upper == 'FEMALE' %}
+                                Kobieta
+                            {% else %}
+                                {{ protege.gender ?? '-' }}</td>
+                            {% endif %}
+                    </tr>
+                    <tr>
+                        <th>Wzrost</th>
+                        <td colspan="2">{{ protege.height ?? '-' }} cm</td>
+                    </tr>
+                    <tr>
+                        <th>Waga</th>
+                        {% if protegeWeight %}
+                            <td colspan="2">{{ protegeWeight.value ?? '-' }} kg (pomiar: {{ protegeWeight.datetime|date('Y-m-d (h:i)') }})
+                        {% else %}
+                            <td colspan="2">-</td>
+                        {% endif %}
+                    </tr>
+                </table>
+            </div>
+
+            <a class="btn btn-sm btn-outline-secondary" href="{{ path('admin_users_edit', {'id':protege.user.id}) }}" style="float:right;">
+              <span data-feather="edit" class="align-text-bottom"></span>
+              Edytuj
+            </a>
+        </div>
+
+        {# TODO? - poki co zaslepki #}
+        <div class="col-sm-6" style="padding:50px;">
+            {# TODO - panel lekarstw #}
+            <a class="btn btn-block btn-primary" href="#">
+              <span data-feather="phone" class="align-text-bottom"></span>
+              Wykonaj połączenie
+            </a>
+            <a class="btn btn-block btn-primary" href="#">
+              <span data-feather="send" class="align-text-bottom"></span>
+              Wyślij wiadomość
+            </a>
+            <a class="btn btn-block btn-danger" href="#">
+              <span data-feather="delete" class="align-text-bottom"></span>
+              Usuń użytkownika
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        {# choroby #}
+        <div class="col-sm-6">
+            <h4>Choroby</h4>
+            <div class="table-responsive">
+                <table class="table table-striped table-sm">
+                <thead>
+                    <tr>
+                        <th scope="col">Nazwa</th>
+                        <th scope="col">Przewlekła</th>
+                        <th scope="col">Początek</th>
+                        <th scope="col">Koniec</th>
+                        <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for disease in protegeDiseaseRecords %}
+                        <tr>
+                            <td>{{ disease.name ?? '-' }}</td>
+                            <td>
+                                {% if disease.isChronic %}
+                                    tak
+                                {% else %}
+                                    nie
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if disease.startDate %}
+                                    {{ disease.startDate|date('Y-m-d (h:i)') }}
+                                {% else %}
+                                    -
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if disease.endDate %}
+                                    {{ disease.endDate|date('Y-m-d (h:i)') }}
+                                {% else %}
+                                    -
+                                {% endif %}
+                            </td>
+                            <td>
+                                {# TODO: zarzadzanie choroba #}
+                                <a class="btn btn-sm btn-outline-secondary" href="{{ path('admin_proteges') }}" style="float:right;">
+                                  <span data-feather="arrow-right" class="align-text-bottom"></span>
+                                </a> 
+                            </td>
+                        </tr>
+                    {% endfor %}
+
+                </tbody>
+                </table>
+            </div>
+
+            <span><small>W tabeli wyświetlono 10 ostatnich pomiarów. <a href="#">Wyświetl wszytko &gt&gt</a></small></span>
+
+            {# <a class="btn btn-sm btn-outline-secondary" href="{{ path('admin_proteges') }}" style="float:right;">
+              <span data-feather="plus" class="align-text-bottom"></span>
+              Dodaj pomiar
+            </a> #}
+        </div>
+
+
+        {# cisnienie #}
+        <div class="col-sm-6">
+            <h4>Pomiary ciśnienia</h4>
+            <div class="table-responsive">
+                <table class="table table-striped table-sm">
+                <thead>
+                    <tr>
+                        <th scope="col">Ciśnienie skurczowe</th>
+                        <th scope="col">Ciśnienie rozkurczowe</th>
+                        <th scope="col">Data</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for pressure in protegePressureRecords %}
+                        <tr>
+                            <td>{{ pressure.systolicPressure ?? '-' }}</td>
+                            <td>{{ pressure.diastolicPressure ?? '-' }}</td>
+                            <td>{{ pressure.datetime|date('Y-m-d (h:i)') }}</td>
+                        </tr>
+                    {% endfor %}
+
+                </tbody>
+                </table>
+            </div>
+
+            <span><small>W tabeli wyświetlono 10 ostatnich pomiarów. <a href="#">Wyświetl wszytko &gt&gt</a></small></span>
+
+            {# <a class="btn btn-sm btn-outline-secondary" href="{{ path('admin_proteges') }}" style="float:right;">
+              <span data-feather="plus" class="align-text-bottom"></span>
+              Dodaj pomiar
+            </a> #}
+        </div>
+
+    </div>
+
+
+    <div class="row">
+        <div class="col-sm-6">
+            <h4>Puls</h4>
+            <div class="table-responsive">
+                <table class="table table-striped table-sm">
+                <thead>
+                    <tr>
+                        <th scope="col">Wartość</th>
+                        <th scope="col">Data</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for puls in protegePulsRecords %}
+                        <tr>
+                            <td>{{ puls.value }}/min</td>
+                            <td>{{ puls.datetime|date('Y-m-d (h:i)') }}</td>
+                        </tr>
+                    {% endfor %}
+
+                </tbody>
+                </table>
+            </div>
+
+            <span><small>W tabeli wyświetlono 10 ostatnich pomiarów. <a href="#">Wyświetl wszytko &gt&gt</a></small></span>
+
+            {# <a class="btn btn-sm btn-outline-secondary" href="{{ path('admin_proteges') }}" style="float:right;">
+              <span data-feather="plus" class="align-text-bottom"></span>
+              Dodaj pomiar
+            </a> #}
+        </div>
+
+
+        <div class="col-sm-6">
+            <h4>Saturacja</h4>
+            <div class="table-responsive">
+                <table class="table table-striped table-sm">
+                <thead>
+                    <tr>
+                        <th scope="col">Wartość</th>
+                        <th scope="col">Data</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for saturation in protegeSaturationRecords %}
+                        <tr>
+                            <td>{{ saturation.value }}/min</td>
+                            <td>{{ saturation.datetime|date('Y-m-d (h:i)') }}</td>
+                        </tr>
+                    {% endfor %}
+
+                </tbody>
+                </table>
+            </div>
+
+            <span><small>W tabeli wyświetlono 10 ostatnich pomiarów. <a href="#">Wyświetl wszytko &gt&gt</a></small></span>
+            {# <a class="btn btn-sm btn-outline-secondary" href="{{ path('admin_proteges') }}" style="float:right;">
+              <span data-feather="plus" class="align-text-bottom"></span>
+              Dodaj pomiar
+            </a> #}
+        </div>
+    </div>
+
+
+    </main>
+
+{% endblock %}

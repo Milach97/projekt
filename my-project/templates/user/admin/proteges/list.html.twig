@@ -40,13 +40,11 @@
               <td>{{ p.user.name ?? '-' }}</td>
               <td>{{ p.user.lastName ?? '-' }}</td>
               <td>
-                  {# TODO #}
-                  {#
-                  <a class="btn btn-xs btn-secondary" href="{{ path('admin_protectors_edit', {'id':p.id} ) }}">
+                  <a class="btn btn-xs btn-secondary" href="{{ path('admin_users_edit', {'id':p.user.id} ) }}">
                     <span data-feather="edit" class="align-text-bottom"></span>
                     Edytuj
                   </a>
-                  #}
+                  
                   <a class="btn btn-xs btn-secondary" href="{{ path('admin_proteges_manage', {'id':p.id} ) }}">
                     <span data-feather="settings" class="align-text-bottom"></span>
                     Zarządzaj

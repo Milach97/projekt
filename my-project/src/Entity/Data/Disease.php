@@ -2,6 +2,7 @@
 
 namespace App\Entity\Data;
 
+use App\Entity\Protege;
 use App\Repository\Data\DiseaseRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -28,6 +29,10 @@ class Disease
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $endDate = null;
+
+    #[ORM\ManyToOne(inversedBy: 'diseases')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Protege $protege = null;
 
     public function getId(): ?int
     {
@@ -90,6 +95,18 @@ class Disease
     public function setEndDate(?\DateTimeInterface $endDate): self
     {
         $this->endDate = $endDate;
+
+        return $this;
+    }
+
+    public function getProtege(): ?Protege
+    {
+        return $this->protege;
+    }
+
+    public function setProtege(?Protege $protege): self
+    {
+        $this->protege = $protege;
 
         return $this;
     }
