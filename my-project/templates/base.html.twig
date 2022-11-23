@@ -4,7 +4,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-        <title>{% block title %}Aplikacja webowa{% endblock %}</title>
+        <title>{% block title %}Aplikacja medyczna{% endblock %}</title>
         {% block header %}{# do dodawania do naglowka #}{% endblock %}
 
 
@@ -25,7 +25,7 @@
 
     <body class="text-center">
         {% block body %}
-            <div class="container-fluid">
+            <div class="container-fluid" style="padding:0px;">
                 {% block menu %}{% include 'includes/_menu.html.twig' %}{% endblock %}
                 {% block main %}{% endblock %}
                 {% block footer %}{% include 'includes/_footer.html.twig' %}{% endblock %}
