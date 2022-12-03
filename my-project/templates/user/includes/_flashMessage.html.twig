@@ -1,0 +1,47 @@
+{% if flashes|length %} 
+    <div class="content" style="padding-bottom:0px;">
+            <div class="row">
+                <div class="col-md-12">
+
+                    {% if flashes.info is defined %}{% for message in flashes.info %}
+                    <div class="card flash-message flash-info">
+                        <i class="material-icons status">info</i>
+                        <i class="material-icons closeFlash" onclick="$(this).parent('div').fadeOut(300, function(){ $(this).remove();});">close</i>
+                        <h4>Informacja</h4>
+                        <div class="message">{{ message|nl2br }}</div>
+                    </div>
+                    {% endfor %}{% endif %}
+
+                    {% if flashes.error is defined %}{% for message in flashes.error %}
+                    <div class="card flash-message flash-error">
+                        <i class="material-icons status">error</i>
+                        <i class="material-icons closeFlash" onclick="$(this).parent('div').fadeOut(300, function(){ $(this).remove();});">close</i>
+                        <h4>Błąd!</h4>
+                        <div class="message">{{ message|nl2br }}</div>
+                    </div>
+                    {% endfor %}{% endif %}
+
+
+                    {% if flashes.warning is defined %}{% for message in flashes.warning %}
+                    <div class="card flash-message flash-warning">
+                        <i class="material-icons status">warning</i>
+                        <i class="material-icons closeFlash" onclick="$(this).parent('div').fadeOut(300, function(){ $(this).remove();});">close</i>
+                        <h4>Uwaga</h4>
+                        <div class="message">{{ message|nl2br }}</div>
+                    </div>
+                    {% endfor %}{% endif %}
+
+                    
+                    {% if flashes.success is defined %}{% for message in flashes.success %}
+                    <div class="card flash-message flash-success">
+                        <i class="material-icons status">done</i>
+                        <i class="material-icons closeFlash" onclick="$(this).parent('div').fadeOut(300, function(){ $(this).remove();});">close</i>
+                        <h4>OK</h4>
+                        <div class="message">{{ message|nl2br }}</div>
+                    </div>
+                    {% endfor %}{% endif %}
+
+                </div>
+            </div>
+    </div>
+{% endif %}

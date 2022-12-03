@@ -69,6 +69,10 @@
       {% include 'user/includes/_sidebarMenu.html.twig' %}
   {% endblock %}
 
+    <div class="container-fluid">
+  {% include 'user/includes/_flashMessage.html.twig' with {'flashes' : app.flashes} %}
+  </div>
+
   {% block main %}
   {% endblock %}
 
