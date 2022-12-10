@@ -1,23 +1,52 @@
 <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
   <div class="position-sticky pt-3 sidebar-sticky">
     <ul class="nav flex-column">
+      {# dla wszystkich uzytkownikow #}
       <li class="nav-item">
-        <a class="nav-link {% if menuHighlight|default() == 'dashboard' %}active{% endif %}" aria-current="page" href="{{ path('admin_dashboard') }}">
+        <a class="nav-link {% if menuHighlight|default() == 'dashboard' %}active{% endif %}" aria-current="page" href="{{ path('user_dashboard') }}">
           <span data-feather="home" class="align-text-bottom"></span>
           Panel główny
         </a>
       </li>
-      {% if is_granted('ROLE_ADMIN') %}
+
+      {# tylko dla konta podopiecznego #}
+      {% if is_granted('ROLE_PROTEGE') %}
       <li class="nav-item">
-        <a class="nav-link {% if menuHighlight|default() == 'protectors' %}active{% endif %}" href="{{ path('admin_protectors') }}">
-          <span data-feather="file" class="align-text-bottom"></span>
-          Opiekunowie
+        <a class="nav-link {% if menuHighlight|default() == 'protegeHealth' %}active{% endif %}" href="{{ path('protege_health') }}">
+          <span data-feather="activity" class="align-text-bottom"></span>
+          Moje zdrowie
         </a>
       </li>
       <li class="nav-item">
+        <a class="nav-link {% if menuHighlight|default() == 'protegeHealth' %}active{% endif %}" href="{{ path('protege_health') }}">
+          <span data-feather="umbrella" class="align-text-bottom"></span>
+          Opiekun
+        </a>
+      </li>
+      {% endif %}
+
+      {# tylko dla opiekunow #}
+      {% if is_granted('ROLE_PROTECTOR') %}
+        <li class="nav-item">
+          <a class="nav-link {% if menuHighlight|default() == 'proteges' %}active{% endif %}" href="{{ path('admin_proteges') }}">
+            <span data-feather="heart" class="align-text-bottom"></span>
+            Moi podopieczni
+          </a>
+        </li>
+      {% endif %}
+
+      {# tylko dla administratora #}
+      {% if is_granted('ROLE_ADMIN') %}
+      <li class="nav-item">
         <a class="nav-link {% if menuHighlight|default() == 'proteges' %}active{% endif %}" href="{{ path('admin_proteges') }}">
-          <span data-feather="shopping-cart" class="align-text-bottom"></span>
+          <span data-feather="heart" class="align-text-bottom"></span>
           Podopieczni
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link {% if menuHighlight|default() == 'protectors' %}active{% endif %}" href="{{ path('admin_protectors') }}">
+          <span data-feather="umbrella" class="align-text-bottom"></span>
+          Opiekunowie
         </a>
       </li>
       <li class="nav-item">
@@ -27,15 +56,12 @@
         </a>
       </li>
       {% endif %}
-      <li class="nav-item">
-        <a class="nav-link {% if menuHighlight|default() == 'protectors' %}events{% endif %}" href="#">
-          <span data-feather="bar-chart-2" class="align-text-bottom"></span>
-          Zdarzenia
-        </a>
-      </li>
+
+
+      {# dla wszystkich uzytkownikow #}
       <li class="nav-item">
         <a class="nav-link {% if menuHighlight|default() == 'statistics' %}active{% endif %}" href="#">
-          <span data-feather="layers" class="align-text-bottom"></span>
+          <span data-feather="bar-chart-2" class="align-text-bottom"></span>
           Statystyki
         </a>
       </li>
@@ -44,7 +70,7 @@
       <li><br></li>
       <hr>
       <li class="nav-item">
-        <a class="nav-link sidebar-heading text-muted text-uppercase" href="#">
+        <a class="nav-link {% if menuHighlight|default() == 'account' %}active{% else %}sidebar-heading text-muted text-uppercase{% endif %}" href="{{ path('user_account') }}">
           <span data-feather="user" class="align-text-bottom "></span>
 
           {{ app.user.email ?? '' }}

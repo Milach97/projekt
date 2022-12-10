@@ -4,12 +4,13 @@ namespace App\Service;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use \App\Entity\User;
 
 /**
  * Description of User
  *
  */
-class User {
+class UserService {
 
     private $em;
     private $passwordHasher;
@@ -19,18 +20,31 @@ class User {
         $this->passwordHasher = $passwordHasher;
     }
 
-    function registerAction(\App\Entity\User $user){
+    function registerAction(User $user){
         $em = $this->em;
         $passwordHasher = $this->passwordHasher;
 
-        //zakoduj haslo i wrzuc usera do bazy
         $user->setPassword($passwordHasher->hashPassword($user, $user->getPassword()));
-
         $em->persist($user);
         $em->flush();
 
         return ['code' => 200,
                 'message' => 'OK'];
+    }
+
+
+    function changePasswordAction(User $user, $newPassord){
+        $em = $this->em;
+        $passwordHasher = $this->passwordHasher;
+
+        $user->setPassword($passwordHasher->hashPassword($user, $newPassord));
+        $em->persist($user);
+        $em->flush();
+
+        return [
+            'code' => 200,
+            'message' => 'Hasło zostało pomyślnie zmienione.'
+        ];
     }
 
 }

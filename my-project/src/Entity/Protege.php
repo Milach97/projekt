@@ -46,6 +46,9 @@ class Protege
     #[ORM\OneToMany(mappedBy: 'protege', targetEntity: Disease::class, orphanRemoval: true)]
     private Collection $diseases;
 
+    #[ORM\ManyToMany(targetEntity: Protector::class, mappedBy: 'protege')]
+    private Collection $protector;
+
 
     public function __construct()
     {
@@ -54,6 +57,7 @@ class Protege
         $this->weights = new ArrayCollection();
         $this->pressures = new ArrayCollection();
         $this->diseases = new ArrayCollection();
+        $this->protector = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -242,6 +246,33 @@ class Protege
             if ($disease->getProtege() === $this) {
                 $disease->setProtege(null);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Protector>
+     */
+    public function getProtector(): Collection
+    {
+        return $this->protector;
+    }
+
+    public function addProtector(Protector $protector): self
+    {
+        if (!$this->protector->contains($protector)) {
+            $this->protector->add($protector);
+            $protector->addProtege($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProtector(Protector $protector): self
+    {
+        if ($this->protector->removeElement($protector)) {
+            $protector->removeProtege($this);
         }
 
         return $this;

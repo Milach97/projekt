@@ -70,8 +70,8 @@
   {% endblock %}
 
     <div class="container-fluid">
-  {% include 'user/includes/_flashMessage.html.twig' with {'flashes' : app.flashes} %}
-  </div>
+        {% include 'user/includes/_flashMessage.html.twig' with {'flashes' : app.flashes} %}
+    </div>
 
   {% block main %}
   {% endblock %}

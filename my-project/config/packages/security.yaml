@@ -21,7 +21,8 @@ security:
                 check_path: login
                 login_path: login
                 #enable_csrf: true
-                default_target_path: admin_dashboard
+                # default_target_path: redirect_after_login
+                default_target_path: user_dashboard
                 username_parameter: _email
             # https://symfony.com/doc/current/security/form_login_setup.html
             logout:

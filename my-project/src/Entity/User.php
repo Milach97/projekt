@@ -45,6 +45,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 20, nullable: true)]
     private ?string $phoneNumber = null;
 
+    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    private ?Protector $protector = null;
+
+    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    private ?Protege $protege = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -147,6 +153,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setPhoneNumber(?string $phoneNumber): self
     {
         $this->phoneNumber = $phoneNumber;
+
+        return $this;
+    }
+
+    public function getProtector(): ?Protector
+    {
+        return $this->protector;
+    }
+
+    public function setProtector(?Protector $protector): self
+    {
+        $this->protector = $protector;
+
+        return $this;
+    }
+
+    public function getProtege(): ?Protege
+    {
+        return $this->protege;
+    }
+
+    public function setProtege(?Protege $protege): self
+    {
+        $this->protege = $protege;
 
         return $this;
     }

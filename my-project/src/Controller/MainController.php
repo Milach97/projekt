@@ -11,7 +11,7 @@ use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 use App\Entity\User;
-use App\Form\UserType;
+use App\Form\User\UserType;
 
 
 class MainController extends AbstractController
