@@ -9,6 +9,9 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 
 use App\Form\Data\PulseType;
+use App\Form\Data\SaturationType;
+use App\Form\Data\PressureType;
+use App\Form\Data\WeightType;
 use App\Service\ProtegeService;
 
 use App\Entity\User;
@@ -88,6 +91,96 @@ class ProtegeHealthController extends AbstractController
 
 
         return $this->render('user/protege/pulse/add.html.twig', [
+            'menuHighlight' => 'protegeHealth',
+            'form' => $form->createView()
+        ]);
+    }
+
+
+
+    /**
+     * @Route("/saturacja/dodaj", name="protege_health_saturation_add")
+     */
+    public function protegeHealthSaturationAdd(Request $request, EntityManagerInterface $em)
+    {
+        //formularz 
+        $form = $this->createForm(SaturationType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            //user z formularza
+            $saturation = $form->getData();
+
+            //serwis
+            $s = new ProtegeService($em);
+            $response = $s->saveSaturationAction($this->getUser()->getProtege(), $saturation->getValue(), $saturation->getDatetime());
+
+            $this->addFlash('success', $response['message']);
+            return $this->redirectToRoute('protege_health');
+        }
+
+
+        return $this->render('user/protege/saturation/add.html.twig', [
+            'menuHighlight' => 'protegeHealth',
+            'form' => $form->createView()
+        ]);
+    }
+
+    
+
+    /**
+     * @Route("/waga/dodaj", name="protege_health_weight_add")
+     */
+    public function protegeHealthWeightAdd(Request $request, EntityManagerInterface $em)
+    {
+        //formularz 
+        $form = $this->createForm(WeightType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            //user z formularza
+            $weight = $form->getData();
+
+            //serwis
+            $s = new ProtegeService($em);
+            $response = $s->saveWeightAction($this->getUser()->getProtege(), $weight->getValue(), $weight->getDatetime());
+
+            $this->addFlash('success', $response['message']);
+            return $this->redirectToRoute('protege_health');
+        }
+
+
+        return $this->render('user/protege/weight/add.html.twig', [
+            'menuHighlight' => 'protegeHealth',
+            'form' => $form->createView()
+        ]);
+    }
+
+
+
+    /**
+     * @Route("/cisnienie/dodaj", name="protege_health_pressure_add")
+     */
+    public function protegeHealthPressureAdd(Request $request, EntityManagerInterface $em)
+    {
+        //formularz 
+        $form = $this->createForm(PressureType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            //user z formularza
+            $pressure = $form->getData();
+
+            //serwis
+            $s = new ProtegeService($em);
+            $response = $s->savePressureAction($this->getUser()->getProtege(), $pressure->getSystolicPressure(), $pressure->getDiastolicPressure(), $pressure->getDatetime());
+
+            $this->addFlash('success', $response['message']);
+            return $this->redirectToRoute('protege_health');
+        }
+
+
+        return $this->render('user/protege/pressure/add.html.twig', [
             'menuHighlight' => 'protegeHealth',
             'form' => $form->createView()
         ]);

@@ -1,0 +1,60 @@
+{% extends 'user/base.html.twig' %}
+
+{% block additionalStyles %}
+    <style>
+        .row{
+            margin-top: 15px;
+            margin-bottom: 15px;
+            padding-top: 15px;
+            padding-bottom: 15px;
+        }
+    </style>
+{% endblock %}
+
+{% block main %}
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+
+        <div class="row">
+            <div class="col-md-6 offset-md-3 ">
+                <h4>Dodaj pomiar</h4>
+
+                {{ form_start(form,{'attr': {'novalidate':'novalidate','class':'needs-validation'}}) }}
+                {# <form action="{{ path('admin_users_edit', {id: user.id}) }}" method="post">     #}
+
+                    <div class="mb-3">
+                        <label for="user_email">Ciśnienie skurczowe</label>
+                        {{ form_widget(form.systolicPressure) }} 
+                        <div class="invalid-feedback">
+                            Poprawna wartość pola 'Ciśnienie skurczowe' jest wymagana.
+                            {{form_errors(form.systolicPressure)}}
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="user_email">Ciśnienie rozkurczowe</label>
+                        {{ form_widget(form.diastolicPressure) }} 
+                        <div class="invalid-feedback">
+                            Poprawna wartość pola 'Ciśnienie rozkurczowe' jest wymagana.
+                            {{form_errors(form.diastolicPressure)}}
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="user_email">Czas pomiaru</label>
+                        {{ form_widget(form.datetime) }} 
+                        <div class="invalid-feedback">
+                            Poprawna wartość pola 'Czas pomiaru' jest wymagana.
+                            {{form_errors(form.datetime)}}
+                        </div>
+                    </div>
+
+
+                    <hr class="mb-4">
+                    <button type="submit" class="btn btn-primary btn-lg col-sm-6">Zapisz</button>
+                {{ form_end(form) }}
+
+            </div>
+        </div>
+
+    </main>
+{% endblock %}
