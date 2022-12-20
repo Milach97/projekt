@@ -2,16 +2,16 @@
     <h5 class="my-0 mr-md-auto font-weight-normal"><a href="{{ path('main_page') }}">Aplikacja medyczna</a></h5>
 
     <nav class="my-2 my-md-0 mr-md-3">
-        <a class="p-2 text-dark" href="#">Link1</a>
-        <a class="p-2 text-dark" href="#">Link2</a>
-        <a class="p-2 text-dark" href="#">Link3</a>
+        <a class="p-2 text-dark" href="#">Informacje</a>
+        <a class="p-2 text-dark" href="#">Regulamin</a>
+        <a class="p-2 text-dark" href="#">Kontakt</a>
         {% if app.user %}
             <a class="p-2 text-dark" href="{{ path('user_dashboard') }}">Dashboard</a>
         {% endif %}
     </nav>
     
     {% if not app.user %}
-        <a class="btn btn-outline-primary mr-2" href="{{ path('register') }}">Zarejestruj się</a>
+        {# <a class="btn btn-outline-primary mr-2" href="{{ path('register') }}">Zarejestruj się</a> #}
         <a class="btn btn-outline-primary" href="{{ path('login') }}">Zaloguj się</a>
     {% endif %}
 </div>

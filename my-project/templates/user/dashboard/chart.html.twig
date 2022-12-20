@@ -1,0 +1,55 @@
+<div class="row">
+    <h2>Ilość rekordów zapisywanych w bazie</h2>
+    <canvas class="my-4 w-100" id="myChart" width="900" height="380"></canvas>
+</div>
+        
+<script>
+    (() => {
+    'use strict'
+
+    feather.replace({ 'aria-hidden': 'true' })
+
+    // Graphs
+    const ctx = document.getElementById('myChart')
+    var timeFormat = 'YYYY-MM-DD';
+
+        
+    // eslint-disable-next-line no-unused-vars
+    const myChart = new Chart(ctx, {
+        type: 'line',
+        title: 'Ilość zapisywanych danych w bazie',
+        data: {
+        labels: [{% for d in data %}
+                    "{{ d.d ?? '-' }}"
+                    {%- if not loop.last -%},{%- endif -%}
+                {% endfor %}],
+        datasets: [{
+            data: [{% for d in data %}
+                    "{{ d.v ?? '-' }}"
+                    {%- if not loop.last -%},{%- endif -%}
+                {% endfor %}],
+            lineTension: 0,
+            backgroundColor: 'transparent',
+            borderColor: '#007bff',
+            borderWidth: 4,
+            pointBackgroundColor: '#007bff'
+        }]
+        },
+        options: {
+        scales: {
+            yAxes: [{
+            ticks: {
+                beginAtZero: false,
+                stepSize: 1
+            }
+            }],
+            
+
+        },
+        legend: {
+            display: false
+        }
+        }
+    })
+    })()
+</script>

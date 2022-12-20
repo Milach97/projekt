@@ -34,11 +34,17 @@ class UserFixtures extends Fixture
             $user->setEmail($email);
             $user->setPassword($this->passwordHasher->hashPassword($user, $password));
             $user->setRoles($roles);
+            $manager->persist($user);
 
             //jezeli dodawany jest podopieczny - stworz w bazie
             if(in_array("ROLE_PROTEGE", $roles)){
+                $protector = $manager->find('App\Entity\Protector', 1);
                 $protege = new Protege();
+                $protege->addProtector($protector);
                 $protege->setUser($user);
+                $user->setProtege($protege);
+                $protector->addProtege($protege);
+                $manager->persist($protector);
 
                 if($protegeData){
                     $protege->setGender($protegeData[0]);
@@ -78,12 +84,13 @@ class UserFixtures extends Fixture
             elseif (in_array('ROLE_PROTECTOR', $roles)){
                 $protector = new Protector();
                 $protector->setUser($user);
+                $user->setProtector($protector);
                 $manager->persist($protector);
             }
         
             $manager->persist($user);
+            $manager->flush();
         }
-        $manager->flush();
     }
 
     private function getUserData(): array
@@ -101,24 +108,30 @@ class UserFixtures extends Fixture
 
     private function getProtegeData($select): array
     {
-        //TODO + set protector
-        //gender, height, [weights], [pulses], [saturations]
-
 
         if($select == 1){
 
             return ['MALE', 180, 
                     [
                         [80, '2022-06-13 13:13'], 
-                        [85, '2022-09-13 17:10']
+                        [91, '2022-07-18 11:13'], 
+                        [95, '2022-07-20 17:03'], 
+                        [85, '2022-09-13 23:55']
                     ],
     
                     [
-                        [90, '2022-06-13 13:13']
+                        [100, '2022-06-19 13:13'],
+                        [60, '2022-07-01 08:30'],
+                        [88, '2022-07-13 10:10'],
+                        [92, '2022-08-18 23:13']
                     ], 
     
                     [
-                        [85, '2022-09-13 17:10']
+                        [85, '2022-09-13 17:10'],
+                        [85, '2022-10-10 18:20'],
+                        [85, '2022-11-13 20:44'],
+                        [85, '2022-12-13 05:18'],
+                        [85, '2022-12-15 07:12']
                     ]
                 ];
         } elseif($select == 2){

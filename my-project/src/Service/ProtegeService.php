@@ -52,7 +52,7 @@ class ProtegeService {
     function saveSaturationAction(Protege $protege, float $saturationValue, $dateTime = null){
         $em = $this->em;
 
-        //nowy zapis pulsu
+        //nowy zapis saturacji
         $saturation = new Saturation();
         $saturation->setValue($saturationValue);
         if($dateTime)
@@ -79,7 +79,7 @@ class ProtegeService {
     function saveWeightAction(Protege $protege, float $weightValue, $dateTime = null){
         $em = $this->em;
 
-        //nowy zapis pulsu
+        //nowy zapis wagi
         $weight = new Weight();
         $weight->setValue($weightValue);
         if($dateTime)
@@ -106,7 +106,7 @@ class ProtegeService {
     function savePressureAction(Protege $protege, float $systolicPressure, float $diastolicPressure, $dateTime = null){
         $em = $this->em;
 
-        //nowy zapis pulsu
+        //nowy zapis cisnienia
         $pressure = new Pressure();
         $pressure->setSystolicPressure($systolicPressure);
         $pressure->setDiastolicPressure($diastolicPressure);

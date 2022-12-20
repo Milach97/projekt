@@ -51,6 +51,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
     private ?Protege $protege = null;
 
+    #[ORM\Column(length: 40, nullable: true)]
+    private ?string $usermobilePasswordCode = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $usermobileSessionId = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -177,6 +183,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setProtege(?Protege $protege): self
     {
         $this->protege = $protege;
+
+        return $this;
+    }
+
+    public function getUsermobilePasswordCode(): ?string
+    {
+        return $this->usermobilePasswordCode;
+    }
+
+    public function setUsermobilePasswordCode(?string $usermobilePasswordCode): self
+    {
+        $this->usermobilePasswordCode = $usermobilePasswordCode;
+
+        return $this;
+    }
+
+    public function getUsermobileSessionId(): ?string
+    {
+        return $this->usermobileSessionId;
+    }
+
+    public function setUsermobileSessionId(?string $usermobileSessionId): self
+    {
+        $this->usermobileSessionId = $usermobileSessionId;
 
         return $this;
     }

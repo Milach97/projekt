@@ -28,7 +28,7 @@
       {# tylko dla opiekunow #}
       {% if is_granted('ROLE_PROTECTOR') %}
         <li class="nav-item">
-          <a class="nav-link {% if menuHighlight|default() == 'proteges' %}active{% endif %}" href="{{ path('admin_proteges') }}">
+          <a class="nav-link {% if menuHighlight|default() == 'proteges' %}active{% endif %}" href="{{ path('protector_proteges') }}">
             <span data-feather="heart" class="align-text-bottom"></span>
             Moi podopieczni
           </a>

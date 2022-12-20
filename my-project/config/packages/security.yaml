@@ -9,10 +9,19 @@ security:
             entity:
                 class: App\Entity\User
                 property: email
+
+        usermobile_provider:
+            memory:
+                users:                   
+                    usermobile:    { password: '123456', roles: [ 'ROLE_USERMOBILEAPI' ] }                   
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
+        usermobile:
+            pattern: ^/api
+            http_basic:
+                provider: usermobile_provider               
         main:
             lazy: true
             provider: app_user_provider
@@ -45,6 +54,7 @@ security:
         - { path: ^/admin, roles: ROLE_ADMIN }
         - { path: ^/opiekun, roles: ROLE_PROTECTOR }
         - { path: ^/p, roles: ROLE_PROTEGE }
+        - { path: ^/api/*, roles: ROLE_USERMOBILE }
 
 when@test:
     security:

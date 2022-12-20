@@ -41,11 +41,25 @@
 
 
         {# wykres #}
-        <div class="row">
-            <canvas class="my-4 w-100" id="myChart" width="900" height="380"></canvas>
-        </div>
-
+        <div class="card" id="dashboard-chart" data-path="{{ path('user_dashboard_chart') }}"></div> 
 
     </main>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        $(document).ready(function() {
+            loadComponent('dashboard-chart');
+        });
+
+        function loadComponent(containerId) {
+            var route = $('#'+containerId).attr('data-path');
+
+                $.get(route, function(response){ 
+                    $('#'+containerId).html(response);
+                    
+            });
+        }
+    </script>
 {% endblock %}
 

@@ -24,34 +24,34 @@ class MainController extends AbstractController
         return $this->render('index.html.twig');
     }
 
-    /**
-     * @Route("/zarejestruj", name="register")
-     */
-    public function register(Request $request, EntityManagerInterface $em, UserPasswordHasherInterface $passwordHasher)
-    {
+    // /**
+    //  * @Route("/zarejestruj", name="register")
+    //  */
+    // public function register(Request $request, EntityManagerInterface $em, UserPasswordHasherInterface $passwordHasher)
+    // {
 
-        $form = $this->createForm(UserType::class);
-        $form->handleRequest($request);
-        if($form->isSubmitted() && $form->isValid()){
+    //     $form = $this->createForm(UserType::class);
+    //     $form->handleRequest($request);
+    //     if($form->isSubmitted() && $form->isValid()){
 
-            //zarejestruj poprzez service
-            // $s = new \App\Service\User($em, $passwordHasher);
-            // $response = $s->registerAction($user);
+    //         //zarejestruj poprzez service
+    //         // $s = new \App\Service\User($em, $passwordHasher);
+    //         // $response = $s->registerAction($user);
 
-            // dokonaj rejestracji uzytkownika
-            $user = $form->getData();
-            $user->setPassword($passwordHasher->hashPassword($user, $user->getPassword()));
-            $em->persist($user);
-            $em->flush();
+    //         // dokonaj rejestracji uzytkownika
+    //         $user = $form->getData();
+    //         $user->setPassword($passwordHasher->hashPassword($user, $user->getPassword()));
+    //         $em->persist($user);
+    //         $em->flush();
 
 
-            $this->addFlash('success', 'Rejestracja użytkownika przebiegła pomyślnie. Możesz przystąpić do logowania.');
-            return $this->redirectToRoute('login');
-        }
-        return $this->render('register.html.twig', [
-            'form' => $form->createView()
-        ]);
-    }
+    //         $this->addFlash('success', 'Rejestracja użytkownika przebiegła pomyślnie. Możesz przystąpić do logowania.');
+    //         return $this->redirectToRoute('login');
+    //     }
+    //     return $this->render('register.html.twig', [
+    //         'form' => $form->createView()
+    //     ]);
+    // }
 
 
 
