@@ -3,6 +3,7 @@
 namespace App\Controller\UserMobileApi;
 
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -13,9 +14,10 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Method;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 
+use App\Entity\User;
 
 /**
- * @Security("is_granted('ROLE_USERMOBILEAPI')")
+
  * @Route("/api/v1/account")
  */
 class AccountController extends AbstractController
@@ -26,7 +28,7 @@ class AccountController extends AbstractController
     /**
      * @Route("/login/{email}", name="api_usermobile_account_login"), methods={"GET"})
      */
-    public function loginAction(Request $request, EntityManager $em, $email): JsonResponse 
+    public function loginAction(Request $request, EntityManagerInterface $em, $email): JsonResponse 
     {
 
         //stala uzywana do szyfrowania 
@@ -50,7 +52,7 @@ class AccountController extends AbstractController
             }
 
             //zlozenie i porownanie hasla
-            if($password == md5($timestamp.$constant.$user->getUsermobilePassword())){
+            if($password == md5($timestamp.$constant.$user->getUsermobilePasswordCode())){
                 //jezeli sie zgadza -> nadaj zakodowane id sesji
                 $user->setUsermobileSessionId(md5($password));
                 $em->persist($user);

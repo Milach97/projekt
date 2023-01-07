@@ -4,6 +4,7 @@ namespace App\Controller\UserMobileApi;
 
 use App\Service\ProtegeService;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -14,10 +15,10 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Method;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 
+use App\Entity\Protege;
 
 /**
- * @Security("is_granted('ROLE_USERMOBILEAPI')")
- * @Route("/api/v1/")
+ * @Route("/api/v1")
  */
 class ProtegeController extends AbstractController
 {
@@ -25,7 +26,7 @@ class ProtegeController extends AbstractController
     /**
      * @Route("/protege/{id}/pulses/{page}", name="api_usermobile_protege_pulse"), methods={"GET"})
      */
-    public function pulsePageAction(Request $request, EntityManager $em, $id, $page = 0): JsonResponse
+    public function pulsePageAction(Request $request, EntityManagerInterface $em, $id, $page = 0): JsonResponse
     {
 
         $protege = $em->getRepository(Protege::class)->find($id);
@@ -44,7 +45,8 @@ class ProtegeController extends AbstractController
 
 
             //wyciagniecie danych
-            $qb->select('p')
+            $qb->select('p.value')
+                ->addSelect('p.datetime')
                 ->from('\App\Entity\Data\Pulse', 'p')
                 ->where('p.protege = :protege')
                 ->setParameter('protege', $protege)
@@ -56,6 +58,7 @@ class ProtegeController extends AbstractController
             $pager->setQueryBuilder('p', $qb);
             $pager->setPage($page);
             $pagerA = $pager->getResult();
+            // dd($pagerA);
 
             //czy ostatnia strona
             if($pager->getPager()['isLastPage']) {
@@ -69,7 +72,7 @@ class ProtegeController extends AbstractController
                     'page' => $pagerA];
 
 
-            //w przypadku braku danych bilingowych - zwrot pustej tablicy
+            //w przypadku braku danych - zwrot pustej tablicy
             return new JsonResponse($data, Response::HTTP_OK);
 
         }
