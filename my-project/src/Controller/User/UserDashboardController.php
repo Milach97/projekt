@@ -110,14 +110,16 @@ class UserDashboardController extends AbstractController
         }
         elseif(in_array('ROLE_PROTEGE', $roles)){
             foreach($daterange as $date){
-                $date = $date->format("Y-m-d");
+
                 //pobierz ilosc danych na ten dzien
                 $pulseCount = $em->getRepository(Pulse::class)->createQueryBuilder('p')
                     ->select('count(p.id)')
                     ->where("p.protege = :protege")
                     ->setParameter('protege', $this->getUser()->getProtege())
-                    ->andWhere("p.datetime = :date")
-                    ->setParameter('date', $date)
+                    ->andWhere("p.datetime >= :date_start")
+                    ->andWhere("p.datetime <= :date_end")
+                    ->setParameter('date_start', $date->format('Y-m-d 00:00:00'))
+                    ->setParameter('date_end',   $date->format('Y-m-d 23:59:59'))
                     ->getQuery()
                     ->getSingleScalarResult();
 
@@ -125,8 +127,10 @@ class UserDashboardController extends AbstractController
                     ->select('count(w.id)')
                     ->where("w.protege = :protege")
                     ->setParameter('protege', $this->getUser()->getProtege())
-                    ->andWhere("w.datetime = :date")
-                    ->setParameter('date', $date)
+                    ->andWhere("w.datetime >= :date_start")
+                    ->andWhere("w.datetime <= :date_end")
+                    ->setParameter('date_start', $date->format('Y-m-d 00:00:00'))
+                    ->setParameter('date_end',   $date->format('Y-m-d 23:59:59'))
                     ->getQuery()
                     ->getSingleScalarResult();
 
@@ -134,8 +138,10 @@ class UserDashboardController extends AbstractController
                     ->select('count(s.id)')
                     ->where("s.protege = :protege")
                     ->setParameter('protege', $this->getUser()->getProtege())
-                    ->andWhere("s.datetime = :date")
-                    ->setParameter('date', $date)
+                    ->andWhere("s.datetime >= :date_start")
+                    ->andWhere("s.datetime <= :date_end")
+                    ->setParameter('date_start', $date->format('Y-m-d 00:00:00'))
+                    ->setParameter('date_end',   $date->format('Y-m-d 23:59:59'))
                     ->getQuery()
                     ->getSingleScalarResult();
 
@@ -143,13 +149,16 @@ class UserDashboardController extends AbstractController
                     ->select('count(pr.id)')
                     ->where("pr.protege = :protege")
                     ->setParameter('protege', $this->getUser()->getProtege())
-                    ->andWhere("pr.datetime = :date")
-                    ->setParameter('date', $date)
+                    ->andWhere("pr.datetime >= :date_start")
+                    ->andWhere("pr.datetime <= :date_end")
+                    ->setParameter('date_start', $date->format('Y-m-d 00:00:00'))
+                    ->setParameter('date_end',   $date->format('Y-m-d 23:59:59'))
                     ->getQuery()
                     ->getSingleScalarResult();
 
 
                 $count = $pulseCount + $weightCount + $saturationCount + $pressureCount;
+                $date = $date->format("Y-m-d");
                 array_push($data, ['d' => strval($date), 'v' => strval($count)]);
             }
         }
