@@ -2,11 +2,14 @@
 
 {% block additionalStyles %}
     <style>
-        .row{
+        .row {
             margin-top: 15px;
             margin-bottom: 15px;
             padding-top: 15px;
             padding-bottom: 15px;
+        }
+        .btn {
+            margin:5px;
         }
     </style>
 {% endblock %}
@@ -74,70 +77,74 @@
             </div>
         </div>
 
-        {# TODO? - poki co zaslepki #}
         <div class="col-sm-6" style="padding:50px;">
-            {# TODO - panel lekarstw #}
-            <a class="btn btn-block btn-primary" href="#">
+            <!-- Modal polaczenia -->
+            <a id="callUserBtn" class="btn btn-block btn-primary" href="#">
               <span data-feather="phone" class="align-text-bottom"></span>
               Wykonaj połączenie
             </a>
-            <a class="btn btn-block btn-primary" href="#">
+            <div id="callUserModal" class="modal">
+                <div class="modal-content">
+                    <span id="callUserClose" class="close">&times;</span>
+                    {% if protege.user.phoneNumber %}
+                        <p><a href="tel:{{ protege.user.phoneNumber }}">Połącz z: {{ protege.user.phoneNumber ?? '-' }}</a></p>
+                    {% else %}
+                        <p>Numer telefonu użytkownika nie został ustalony.</p>
+                    {% endif %}
+                </div>
+            </div>
+
+
+            <!-- Modal wiadomosci e-mail -->
+            <a id="mesgUserBtn" class="btn btn-block btn-primary" href="#">
               <span data-feather="send" class="align-text-bottom"></span>
               Wyślij wiadomość
             </a>
-            <a class="btn btn-block btn-danger" href="#">
-              <span data-feather="delete" class="align-text-bottom"></span>
-              Usuń użytkownika
+            <div id="mesgUserModal" class="modal">
+                <div class="modal-content">
+                    <span id="mesgUserClose" class="close">&times;</span>
+                    {% if protege.user.email %}
+                        <p><a href="mailto:{{ protege.user.email }}">Wyślij wiadomość do: {{ protege.user.email ?? '-' }}</a></p>
+                    {% else %}
+                        <p>Adres e-mail użytkownika nie został znaleniony</p?
+                    {% endif %}
+                </div>
+            </div>
+
+
+            <!-- Modal edycji uzytkownika -->
+            <a id="editUserBtn" class="btn btn-block btn-warning" href="#">
+              <span data-feather="edit" class="align-text-bottom"></span>
+              Edytuj użytkownika
             </a>
+
+            <div id="editUserModal" class="modal">
+                <div id="editUserClose" class="modal-content">
+                    <span class="close">&times;</span>
+                    <p>Możliwość edycji danych użytkownika posiada jedynie administrator. W celu dokonania zmian, prosimy o kontakt z administratorem systemu.</p>
+                </div>
+            </div>
+
         </div>
     </div>
 
     <div class="row">
-        {# choroby #}
-        <div class="col-sm-6">
-            <h4>Choroby</h4>
+
+        <div class="col-sm-6 col-lg-4">
+            <h4>Puls</h4>
             <div class="table-responsive">
                 <table class="table table-striped table-sm">
                 <thead>
                     <tr>
-                        <th scope="col">Nazwa</th>
-                        <th scope="col">Przewlekła</th>
-                        <th scope="col">Początek</th>
-                        <th scope="col">Koniec</th>
-                        <th scope="col"></th>
+                        <th scope="col">Wartość</th>
+                        <th scope="col">Data</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for disease in protegeDiseaseRecords %}
+                    {% for puls in protegePulsRecords %}
                         <tr>
-                            <td>{{ disease.name ?? '-' }}</td>
-                            <td>
-                                {% if disease.isChronic %}
-                                    tak
-                                {% else %}
-                                    nie
-                                {% endif %}
-                            </td>
-                            <td>
-                                {% if disease.startDate %}
-                                    {{ disease.startDate|date('Y-m-d (h:i)') }}
-                                {% else %}
-                                    -
-                                {% endif %}
-                            </td>
-                            <td>
-                                {% if disease.endDate %}
-                                    {{ disease.endDate|date('Y-m-d (h:i)') }}
-                                {% else %}
-                                    -
-                                {% endif %}
-                            </td>
-                            <td>
-                                {# TODO: zarzadzanie choroba #}
-                                <a class="btn btn-sm btn-outline-secondary" href="{{ path('admin_proteges') }}" style="float:right;">
-                                  <span data-feather="arrow-right" class="align-text-bottom"></span>
-                                </a> 
-                            </td>
+                            <td>{{ puls.value }}/min</td>
+                            <td>{{ puls.datetime|date('Y-m-d (h:i)') }}</td>
                         </tr>
                     {% endfor %}
 
@@ -146,16 +153,37 @@
             </div>
 
             <span><small>W tabeli wyświetlono 10 ostatnich pomiarów. <a href="#">Wyświetl wszytko &gt&gt</a></small></span>
+        </div>
 
-            {# <a class="btn btn-sm btn-outline-secondary" href="{{ path('admin_proteges') }}" style="float:right;">
-              <span data-feather="plus" class="align-text-bottom"></span>
-              Dodaj pomiar
-            </a> #}
+
+        <div class="col-sm-6 col-lg-4">
+            <h4>Saturacja</h4>
+            <div class="table-responsive">
+                <table class="table table-striped table-sm">
+                <thead>
+                    <tr>
+                        <th scope="col">Wartość</th>
+                        <th scope="col">Data</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for saturation in protegeSaturationRecords %}
+                        <tr>
+                            <td>{{ saturation.value }}/min</td>
+                            <td>{{ saturation.datetime|date('Y-m-d (h:i)') }}</td>
+                        </tr>
+                    {% endfor %}
+
+                </tbody>
+                </table>
+            </div>
+
+            <span><small>W tabeli wyświetlono 10 ostatnich pomiarów. <a href="#">Wyświetl wszytko &gt&gt</a></small></span>
         </div>
 
 
         {# cisnienie #}
-        <div class="col-sm-6">
+        <div class="col-sm-6 col-lg-4">
             <h4>Pomiary ciśnienia</h4>
             <div class="table-responsive">
                 <table class="table table-striped table-sm">
@@ -180,79 +208,65 @@
             </div>
 
             <span><small>W tabeli wyświetlono 10 ostatnich pomiarów. <a href="#">Wyświetl wszytko &gt&gt</a></small></span>
-
-            {# <a class="btn btn-sm btn-outline-secondary" href="{{ path('admin_proteges') }}" style="float:right;">
-              <span data-feather="plus" class="align-text-bottom"></span>
-              Dodaj pomiar
-            </a> #}
-        </div>
-
-    </div>
-
-
-    <div class="row">
-        <div class="col-sm-6">
-            <h4>Puls</h4>
-            <div class="table-responsive">
-                <table class="table table-striped table-sm">
-                <thead>
-                    <tr>
-                        <th scope="col">Wartość</th>
-                        <th scope="col">Data</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for puls in protegePulsRecords %}
-                        <tr>
-                            <td>{{ puls.value }}/min</td>
-                            <td>{{ puls.datetime|date('Y-m-d (h:i)') }}</td>
-                        </tr>
-                    {% endfor %}
-
-                </tbody>
-                </table>
-            </div>
-
-            <span><small>W tabeli wyświetlono 10 ostatnich pomiarów. <a href="#">Wyświetl wszytko &gt&gt</a></small></span>
-
-            {# <a class="btn btn-sm btn-outline-secondary" href="{{ path('admin_proteges') }}" style="float:right;">
-              <span data-feather="plus" class="align-text-bottom"></span>
-              Dodaj pomiar
-            </a> #}
-        </div>
-
-
-        <div class="col-sm-6">
-            <h4>Saturacja</h4>
-            <div class="table-responsive">
-                <table class="table table-striped table-sm">
-                <thead>
-                    <tr>
-                        <th scope="col">Wartość</th>
-                        <th scope="col">Data</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for saturation in protegeSaturationRecords %}
-                        <tr>
-                            <td>{{ saturation.value }}/min</td>
-                            <td>{{ saturation.datetime|date('Y-m-d (h:i)') }}</td>
-                        </tr>
-                    {% endfor %}
-
-                </tbody>
-                </table>
-            </div>
-
-            <span><small>W tabeli wyświetlono 10 ostatnich pomiarów. <a href="#">Wyświetl wszytko &gt&gt</a></small></span>
-            {# <a class="btn btn-sm btn-outline-secondary" href="{{ path('admin_proteges') }}" style="float:right;">
-              <span data-feather="plus" class="align-text-bottom"></span>
-              Dodaj pomiar
-            </a> #}
         </div>
     </div>
 
 
     </main>
+
+{% endblock %}
+
+{% block javascripts %}
+
+    {# modals #}
+    <script>
+
+        //callUser
+        var callUserModal = document.getElementById("callUserModal");
+        var callUserBtn = document.getElementById("callUserBtn");
+        var callUserClose = document.getElementById("callUserClose");
+
+        callUserBtn.onclick = function() {
+            callUserModal.style.display = "block";
+        }
+        callUserClose.onclick = function() {
+            callUserModal.style.display = "none";
+        }
+
+
+        //mesgUser
+        var mesgUserModal = document.getElementById("mesgUserModal");
+        var mesgUserBtn = document.getElementById("mesgUserBtn");
+        var mesgUserClose = document.getElementById("mesgUserClose");
+
+        mesgUserBtn.onclick = function() {
+            mesgUserModal.style.display = "block";
+        }
+        mesgUserClose.onclick = function() {
+            mesgUserModal.style.display = "none";
+        }
+
+        //editUser
+        var editUserModal = document.getElementById("editUserModal");
+        var editUserBtn = document.getElementById("editUserBtn");
+        var editUserClose = document.getElementById("editUserClose");
+
+        editUserBtn.onclick = function() {
+            editUserModal.style.display = "block";
+        }
+        editUserClose.onclick = function() {
+            editUserModal.style.display = "none";
+        }
+
+
+        window.onclick = function(event) {
+            if (event.target == editUserModal || event.target == mesgUserModal || event.target == callUserModal) {
+                editUserModal.style.display = "none";
+                mesgUserModal.style.display = "none";
+                callUserModal.style.display = "none";
+            }
+        }
+
+    </script>
 
 {% endblock %}

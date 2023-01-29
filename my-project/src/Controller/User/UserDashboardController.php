@@ -103,12 +103,112 @@ class UserDashboardController extends AbstractController
 
 
         if(in_array('ROLE_ADMIN' ,$roles)){
-            //TODO
+            foreach ($daterange as $date) {
+                //pobranie ilosci rekordow w bazie
+                $pulseCount = $em->getRepository(Pulse::class)->createQueryBuilder('p')
+                    ->select('count(p.id)')
+                    ->where("p.datetime >= :date_start")
+                    ->andWhere("p.datetime <= :date_end")
+                    ->setParameter('date_start', $date->format('Y-m-d 00:00:00'))
+                    ->setParameter('date_end', $date->format('Y-m-d 23:59:59'))
+                    ->getQuery()
+                    ->getSingleScalarResult();
+
+                $weightCount = $em->getRepository(Weight::class)->createQueryBuilder('w')
+                    ->select('count(w.id)')
+                    ->where("w.datetime >= :date_start")
+                    ->andWhere("w.datetime <= :date_end")
+                    ->setParameter('date_start', $date->format('Y-m-d 00:00:00'))
+                    ->setParameter('date_end',   $date->format('Y-m-d 23:59:59'))
+                    ->getQuery()
+                    ->getSingleScalarResult(); 
+                    
+                $saturationCount = $em->getRepository(Weight::class)->createQueryBuilder('s')
+                    ->select('count(s.id)')
+                    ->where("s.datetime >= :date_start")
+                    ->andWhere("s.datetime <= :date_end")
+                    ->setParameter('date_start', $date->format('Y-m-d 00:00:00'))
+                    ->setParameter('date_end',   $date->format('Y-m-d 23:59:59'))
+                    ->getQuery()
+                    ->getSingleScalarResult();           
+                    
+                $pressureCount = $em->getRepository(Pressure::class)->createQueryBuilder('pr')
+                    ->select('count(pr.id)')
+                    ->where("pr.datetime >= :date_start")
+                    ->andWhere("pr.datetime <= :date_end")
+                    ->setParameter('date_start', $date->format('Y-m-d 00:00:00'))
+                    ->setParameter('date_end',   $date->format('Y-m-d 23:59:59'))
+                    ->getQuery()
+                    ->getSingleScalarResult();      
+                    
+                //zliczenie calosci
+                $count = $pulseCount + $weightCount + $saturationCount + $pressureCount;
+                $date = $date->format("Y-m-d");
+                array_push($data, ['d' => strval($date), 'v' => strval($count)]);                    
+
+            }
         }
         elseif(in_array('ROLE_PROTECTOR', $roles)){
-            //TODO
+
+            //podopieczni przypisani do opiekuna
+            $proteges = $this->getUser()->getProtector()->getProtege();
+            
+
+            foreach($daterange as $date){
+
+                //pobierz ilosc danych na ten dzien
+                $pulseCount = $em->getRepository(Pulse::class)->createQueryBuilder('p')
+                    ->select('count(p.id)')
+                    ->where("p.protege IN (:proteges)")
+                    ->setParameter('proteges', $proteges)
+                    ->andWhere("p.datetime >= :date_start")
+                    ->andWhere("p.datetime <= :date_end")
+                    ->setParameter('date_start', $date->format('Y-m-d 00:00:00'))
+                    ->setParameter('date_end',   $date->format('Y-m-d 23:59:59'))
+                    ->getQuery()
+                    ->getSingleScalarResult();
+
+                $weightCount = $em->getRepository(Weight::class)->createQueryBuilder('w')
+                    ->select('count(w.id)')
+                    ->where("w.protege IN (:proteges)")
+                    ->setParameter('proteges', $proteges)
+                    ->andWhere("w.datetime >= :date_start")
+                    ->andWhere("w.datetime <= :date_end")
+                    ->setParameter('date_start', $date->format('Y-m-d 00:00:00'))
+                    ->setParameter('date_end',   $date->format('Y-m-d 23:59:59'))
+                    ->getQuery()
+                    ->getSingleScalarResult();
+
+                $saturationCount = $em->getRepository(Weight::class)->createQueryBuilder('s')
+                    ->select('count(s.id)')
+                    ->where("s.protege IN (:proteges)")
+                    ->setParameter('proteges', $proteges)
+                    ->andWhere("s.datetime >= :date_start")
+                    ->andWhere("s.datetime <= :date_end")
+                    ->setParameter('date_start', $date->format('Y-m-d 00:00:00'))
+                    ->setParameter('date_end',   $date->format('Y-m-d 23:59:59'))
+                    ->getQuery()
+                    ->getSingleScalarResult();
+
+                $pressureCount = $em->getRepository(Pressure::class)->createQueryBuilder('pr')
+                    ->select('count(pr.id)')
+                    ->where("pr.protege IN (:proteges)")
+                    ->setParameter('proteges', $proteges)
+                    ->andWhere("pr.datetime >= :date_start")
+                    ->andWhere("pr.datetime <= :date_end")
+                    ->setParameter('date_start', $date->format('Y-m-d 00:00:00'))
+                    ->setParameter('date_end',   $date->format('Y-m-d 23:59:59'))
+                    ->getQuery()
+                    ->getSingleScalarResult();
+
+                //zlicz calosc
+                $count = $pulseCount + $weightCount + $saturationCount + $pressureCount;
+                $date = $date->format("Y-m-d");
+                array_push($data, ['d' => strval($date), 'v' => strval($count)]);
+            }
         }
         elseif(in_array('ROLE_PROTEGE', $roles)){
+
             foreach($daterange as $date){
 
                 //pobierz ilosc danych na ten dzien
@@ -156,7 +256,7 @@ class UserDashboardController extends AbstractController
                     ->getQuery()
                     ->getSingleScalarResult();
 
-
+                //zlicz calosc
                 $count = $pulseCount + $weightCount + $saturationCount + $pressureCount;
                 $date = $date->format("Y-m-d");
                 array_push($data, ['d' => strval($date), 'v' => strval($count)]);

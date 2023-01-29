@@ -26,19 +26,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private array $roles = [];
 
-    //TODO: dodac walidacje i max leng
     /**
      * @var string The hashed password
      */
     #[ORM\Column]
     private ?string $password = null;
 
-    //TODO: walidacja
     #[Assert\NotBlank(message: "Proszę wprowadzić imię.")]
     #[ORM\Column(length: 45)]
     private ?string $name = null;
 
-    //TODO: walidacja
+    #[Assert\NotBlank(message: "Proszę wprowadzić nazwisko.")]
     #[ORM\Column(length: 45)]
     private ?string $last_name = null;
 
