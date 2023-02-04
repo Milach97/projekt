@@ -29,8 +29,6 @@ class ProtegeProtectorsController extends AbstractController
     public function protegeCard(Request $request, EntityManagerInterface $em)
     {
         $this->denyAccessUnlessGranted('ROLE_PROTEGE');
-        //TODO: dodac protege i protecor do USER
-
 
         $protege = $em->getRepository(Protege::class)->findOneBy(array('user' => $this->getUser()));
         if(!$protege)

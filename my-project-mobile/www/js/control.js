@@ -1,42 +1,11 @@
 
 $(function () {
 
-
-    //App.GetObjectsForMainPage();
-    //App.GetCities(); 
-
-
-    // $(":mobile-pagecontainer").on("pagecontainerbeforetransition", function (event, ui) {
-    //     //dodanie headera i footera do storny ?
-    //     $("#header").prependTo(ui.toPage);
-    //     $("#footer").appendTo(ui.toPage);
-    // });
-    
-    
-
-    //brak przycisku logowania -> funkcja nie potrzebna
-    // if (App.IsLoggedIn())
-    // {
-    //     $('#loginhref').html('Wyloguj');
-    //     $('#loginhref').attr('href','#');
-    //     $('#loginhref').addClass('logout');
-    // }
-    // else
-    // {
-    //     $('#loginhref').html('Logowanie');
-    //     $('#loginhref').attr('href','#loginpage');
-    //     $('#loginhref').removeClass('logout');
-    // }
-    
-    
-
     //akcja wylogowania
     $(document).on('click','#logout',function(){
-        console.log('wyloguj');
         localStorage.removeItem('loginData');
         $(':mobile-pagecontainer').pagecontainer('change', '#loginpage');
     });
-    
     
     
     //akcja logowania
@@ -48,27 +17,15 @@ $(function () {
     });
 
 
-
-
     //wyswietlenie storny mojezdrowie
     $(document).on("pagebeforeshow", "#myhealth", function () {
-
         if (!App.IsLoggedIn())
         {
             $(':mobile-pagecontainer').pagecontainer('change', '#loginpage');
             return;
         }
-
-        console.log('Uzytkownik zalogowany - ');
-        //App.GetUserReservations(); 
-        // $('#header-text').html('Panel użytkownika');
     });
 
-
-    // $(document).on("pagebeforeshow", "#loginpage", function () {
-    //     $('#header-text').html('Panel logowania');
-    // });
-    
     
     //puls
     $(document).on("pagebeforeshow", "#pulse", function () {

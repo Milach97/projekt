@@ -108,40 +108,31 @@ var Ajax = {
     go: function ( type, url, data, success, beforeSend, complete, error ) {
 
         $.ajax({
-
             cache: false,
             url: App.BaseUrl  + url + '?sessionId=' + App.GetSessionId(),
             type: type,
             dataType: "json",
             data: data,
 
-
             success: function(response){
                 if(success){
                     App[success](response);
                 }
-
             },
             beforeSend: function(xhr){
-                //xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-                //xhr.setRequestHeader ("Authorization", "Basic " + btoa("usermobile:123456"));
-
                 if(beforeSend)
-                App[beforeSend](xhr);
-
+                    App[beforeSend](xhr);
             },
             error: function(response){
                 if(error)
-                if(response)
-                App[error](response);
-                else
-                App[error]();
-
+                    if(response)
+                        App[error](response);
+                    else
+                        App[error]();
             },
             complete: function(){
                 if(complete)
-                App[complete]();
-
+                    App[complete]();
             }
 
         });

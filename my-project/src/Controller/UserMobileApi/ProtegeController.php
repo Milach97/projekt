@@ -28,21 +28,17 @@ class ProtegeController extends AbstractController
      */
     public function pulsePageAction(Request $request, EntityManagerInterface $em, $id, $page = 0): JsonResponse
     {
-
         $protege = $em->getRepository(Protege::class)->find($id);
         if(!$protege)
             return new JsonResponse(['message' => 'Podopieczny nie został znaleziony w naszej bazie danych.'], Response::HTTP_BAD_REQUEST);
 
-            
         //sprawdzenie aktualnej sesji
         $user = $protege->getUser();
         $sessionId = $request->get('sessionId');
         if ($user->getUsermobileSessionId() != null && $sessionId == $user->getUsermobileSessionId()) {
-
             // -------- PAGER START ---------
             $qb = $em->createQueryBuilder();
             $qb instanceof \Doctrine\ORM\QueryBuilder;
-
 
             //wyciagniecie danych
             $qb->select('p.value')
@@ -52,13 +48,11 @@ class ProtegeController extends AbstractController
                 ->setParameter('protege', $protege)
                 ->orderBy('p.datetime', 'DESC');
 
-
             //PAGER
             $pager = new \App\Utils\Pager(10);
             $pager->setQueryBuilder('p', $qb);
             $pager->setPage($page);
             $pagerA = $pager->getResult();
-            // dd($pagerA);
 
             //czy ostatnia strona
             if($pager->getPager()['isLastPage']) {
@@ -71,10 +65,8 @@ class ProtegeController extends AbstractController
             $data = ['isNextPage' => $isNextPage, 
                     'page' => $pagerA];
 
-
             //w przypadku braku danych - zwrot pustej tablicy
             return new JsonResponse($data, Response::HTTP_OK);
-
         }
         else
             return new JsonResponse(['message' => 'Sesja użytkownika wygasła.'], Response::HTTP_BAD_REQUEST); 

@@ -44,7 +44,6 @@ class ProtegeController extends AbstractController
      * @Route("/zarzadzaj/{id<\d+>}", name="protector_proteges_manage")
      */
     public function manageAction(Request $request, EntityManagerInterface $em, $id){
-        //TODO: czy nalezy do opiekuna?
         $protege = $em->getRepository(Protege::class)->find($id);
         if(!$protege)
             throw $this->createNotFoundException('Protege not found. '.'ID: '.$id);

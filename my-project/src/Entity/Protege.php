@@ -30,7 +30,6 @@ class Protege
     #[ORM\OneToMany(mappedBy: 'protege', targetEntity: Saturation::class, orphanRemoval: true)]
     private Collection $saturations;
 
-    //TODO stworzyc enum
     #[ORM\Column(length: 50, nullable: true)]
     private ?string $gender = null;
 
