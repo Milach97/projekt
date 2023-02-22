@@ -5,35 +5,30 @@ var App = {
     UserRole: null,
     Md5Hash: null,
 
-
     Login: function(email, password) {
         timestamp = Math.floor(Date.now() / 1000);
         salt = '4gmHNIl7RHx0e6TGDQcXsLDZ4mb7tPTj2Tj23t8UBDTicRUCGvX58E4TM56lEucx';
         hash = SparkMD5.hash(timestamp+salt+password);   
 
-        //localStorage.setItem("hash", hash);
         App.Md5Hash = hash;
+        email = email.replace('.', '%2E');
 
-        Ajax.login('GET', 'account/login/'+email, {"timestamp": timestamp, "password":hash}, 'SuccessLogin', null, 'CompleteLogin', 'ErrorLogin');
+        Ajax.login('GET', 'account/login/'+encodeURIComponent(email), 
+        {"timestamp": timestamp, "password":hash}, 'SuccessLogin', null, 'CompleteLogin', 'ErrorLogin');
     },
-    
 
-    SuccessLogin: function() {
+    SuccessLogin: function(response) {
         //ponownie zakodowany hash jako sessionId
         sessionId = SparkMD5.hash(App.Md5Hash);
         App.Md5Hash = null;
         
-        //poki co tylko jedna rola - nie ma potrzeby odbierania roli uzytkownika z API
         App.UserRole = 'ROLE_PROTEGE';
 
         //dane logowania zapisane w apce
         var loginData = {"sessionId": sessionId, "timestamp": Math.floor(Date.now() / 1000)};
         localStorage.setItem("loginData", JSON.stringify(loginData));
         
-        //TODO: zapisac id podopiecznego do sesji
-        sessionStorage.setItem('protege_id', "1");
- 
-
+        sessionStorage.setItem('protege_id', response.protegeId);
         console.log('zostales zalogowany');
 
         //zmiana strony

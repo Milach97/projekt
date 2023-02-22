@@ -51,6 +51,15 @@
                     </div>
 
                     <div class="mb-3">
+                        <label for="user_last_name">Nr telefonu:</label>
+                        {{ form_widget(form.phone_number) }} 
+                        <div class="invalid-feedback">
+                            {{form_errors(form.phone_number)}}
+                        </div>
+                    </div>
+
+
+                    <div class="mb-3">
                         <label for="user_password_first">Hasło:</label>
                         {{ form_widget(form.password.first) }} 
                         <div class="invalid-feedback">
@@ -65,6 +74,15 @@
                         <div class="invalid-feedback">
                             Poprawnie powtórz hasło.
                             {{form_errors(form.password.second)}}
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="user_protege">Podopieczni:</label>
+                        {{ form_widget(form.protege) }}
+                        <div class="invalid-feedback">
+                            Wybierz podopiecznych
+                            {{form_errors(form.protege)}}
                         </div>
                     </div>
 

@@ -74,4 +74,60 @@ class ProtegeController extends AbstractController
         ]);
     }
 
+
+    /**
+     * @Route("/zarzadzaj/{id<\d+>}/dane/puls", name="admin_proteges_manage_data_pulse")
+     */
+    public function dataPulseAction(Request $request, EntityManagerInterface $em, $id)
+    {
+        $protege = $em->getRepository(Protege::class)->find($id);
+        if(!$protege)
+            throw $this->createNotFoundException('Protege not found. '.'ID: '.$id);
+
+        $protegePulsRecords = $em->getRepository(Pulse::class)->findBy(['protege' => $protege], ['datetime' => 'DESC']);    
+        
+        
+        return $this->render('user/admin/proteges/data/pulse.html.twig', [
+            'menuHighlight' => 'proteges',
+            'protegePulsRecords' => $protegePulsRecords
+        ]);
+    }
+
+
+    /**
+     * @Route("/zarzadzaj/{id<\d+>}/dane/saturacja", name="admin_proteges_manage_data_saturation")
+     */
+    public function dataSaturationAction(Request $request, EntityManagerInterface $em, $id)
+    {
+        $protege = $em->getRepository(Protege::class)->find($id);
+        if(!$protege)
+            throw $this->createNotFoundException('Protege not found. '.'ID: '.$id);
+
+        $protegeSaturationRecords = $em->getRepository(Saturation::class)->findBy(['protege' => $protege], ['datetime' => 'DESC']);    
+        
+        
+        return $this->render('user/admin/proteges/data/saturation.html.twig', [
+            'menuHighlight' => 'proteges',
+            'protegeSaturationRecords' => $protegeSaturationRecords
+        ]);
+    }
+
+
+    /**
+     * @Route("/zarzadzaj/{id<\d+>}/dane/cisnienie", name="admin_proteges_manage_data_pressure")
+     */
+    public function dataPressureAction(Request $request, EntityManagerInterface $em, $id)
+    {
+        $protege = $em->getRepository(Protege::class)->find($id);
+        if(!$protege)
+            throw $this->createNotFoundException('Protege not found. '.'ID: '.$id);
+
+        $protegePressureRecords = $em->getRepository(Pressure::class)->findBy(['protege' => $protege], ['datetime' => 'DESC']);    
+        
+        
+        return $this->render('user/admin/proteges/data/pressure.html.twig', [
+            'menuHighlight' => 'proteges',
+            'protegePressureRecords' => $protegePressureRecords
+        ]);
+    }
 }

@@ -185,4 +185,63 @@ class ProtegeHealthController extends AbstractController
             'form' => $form->createView()
         ]);
     }
+
+    /**
+     * @Route("/puls/dane", name="protege_health_pulse_data")
+     */
+    public function dataPulseAction(Request $request, EntityManagerInterface $em)
+    {
+        $protege = $em->getRepository(Protege::class)->findOneBy(array('user' => $this->getUser()));
+        if(!$protege)
+            throw $this->createNotFoundException('Protege not found. '.'User ID: '.$this->getUser()->getId());
+
+
+        $protegePulsRecords = $em->getRepository(Pulse::class)->findBy(['protege' => $protege], ['datetime' => 'DESC']);    
+        
+        
+        return $this->render('user/protege/pulse/pulse.html.twig', [
+            'menuHighlight' => 'protegeHealth',
+            'protegePulsRecords' => $protegePulsRecords
+        ]);
+    }
+
+
+    /**
+     * @Route("/saturacja/dane", name="protege_health_saturation_data")
+     */
+    public function dataSaturationAction(Request $request, EntityManagerInterface $em)
+    {
+        $protege = $em->getRepository(Protege::class)->findOneBy(array('user' => $this->getUser()));
+        if(!$protege)
+            throw $this->createNotFoundException('Protege not found. '.'User ID: '.$this->getUser()->getId());
+
+
+        $protegeSaturationRecords = $em->getRepository(Saturation::class)->findBy(['protege' => $protege], ['datetime' => 'DESC']);    
+        
+        
+        return $this->render('user/protege/saturation/saturation.html.twig', [
+            'menuHighlight' => 'protegeHealth',
+            'protegeSaturationRecords' => $protegeSaturationRecords
+        ]);
+    }
+
+
+    /**
+     * @Route("/cisnienie/dane", name="protege_health_pressure_data")
+     */
+    public function dataPressureAction(Request $request, EntityManagerInterface $em)
+    {
+        $protege = $em->getRepository(Protege::class)->findOneBy(array('user' => $this->getUser()));
+        if(!$protege)
+            throw $this->createNotFoundException('Protege not found. '.'User ID: '.$this->getUser()->getId());
+
+
+        $protegePressureRecords = $em->getRepository(Pressure::class)->findBy(['protege' => $protege], ['datetime' => 'DESC']);    
+        
+        
+        return $this->render('user/protege/pressure/pressure.html.twig', [
+            'menuHighlight' => 'protegeHealth',
+            'protegePressureRecords' => $protegePressureRecords
+        ]);
+    }
 }

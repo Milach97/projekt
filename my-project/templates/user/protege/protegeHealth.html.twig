@@ -91,12 +91,11 @@
                 </table>
             </div>
 
-            <span><small>W tabeli wyświetlono 10 ostatnich pomiarów. <a href="#">Wyświetl wszytko &gt&gt</a></small></span>
-
-            {# <a class="btn btn-sm btn-outline-secondary" href="{{ path('admin_proteges') }}" style="float:right;">
+            <span><small>W tabeli wyświetlono 10 ostatnich pomiarów. <a href="{{ path('protege_health_pressure_data') }}">Wyświetl wszytko &gt&gt</a></small></span>
+            <a class="btn btn-sm btn-outline-secondary" href="{{ path('protege_health_pressure_add') }}" style="float:right;">
               <span data-feather="plus" class="align-text-bottom"></span>
               Dodaj pomiar
-            </a> #}
+            </a>
         </div>
 
         <div class="col-sm-6">
@@ -121,7 +120,7 @@
                 </table>
             </div>
 
-            <span><small>W tabeli wyświetlono 10 ostatnich pomiarów. <a href="#">Wyświetl wszytko &gt&gt</a></small></span>
+            <span><small>W tabeli wyświetlono 10 ostatnich pomiarów. <a href="{{ path('protege_health_pulse_data') }}">Wyświetl wszytko &gt&gt</small></span>
 
             <a class="btn btn-sm btn-outline-secondary" href="{{ path('protege_health_pulse_add') }}" style="float:right;">
               <span data-feather="plus" class="align-text-bottom"></span>
@@ -152,11 +151,11 @@
                 </table>
             </div>
 
-            <span><small>W tabeli wyświetlono 10 ostatnich pomiarów. <a href="#">Wyświetl wszytko &gt&gt</a></small></span>
-            {# <a class="btn btn-sm btn-outline-secondary" href="{{ path('admin_proteges') }}" style="float:right;">
+            <span><small>W tabeli wyświetlono 10 ostatnich pomiarów. <a href="{{ path('protege_health_saturation_data') }}">Wyświetl wszytko &gt&gt</small></span>
+            <a class="btn btn-sm btn-outline-secondary" href="{{ path('protege_health_saturation_add') }}" style="float:right;">
               <span data-feather="plus" class="align-text-bottom"></span>
               Dodaj pomiar
-            </a> #}
+            </a>
         </div>
     </div>
 

@@ -6,14 +6,17 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\TelType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 use App\Entity\Protector;
+use App\Entity\Protege;
 use App\Form\ProtectorType;
 use App\Entity\User;
 
@@ -53,16 +56,26 @@ class ProtectorController extends AbstractController
                 'email' => $protector->getUser()->getEmail(),
                 'name' => $protector->getUser()->getName(),
                 'last_name' => $protector->getUser()->getLastName(),
+                'phone_number' => $protector->getUser()->getPhoneNumber(),
+                'protege' => $protector->getProtege()
             ];
 
             $formBuilder = $this->createFormBuilder($arr);
             $formBuilder
-                ->add('email', EmailType::class, ['mapped' => false])
-                ->add('name', TextType::class, ['mapped' => false])
-                ->add('last_name', TextType::class, ['mapped' => false])
+                ->add('email', EmailType::class, ['mapped' => false, 'data' => $arr['email']])
+                ->add('name', TextType::class, ['mapped' => false, 'data' => $arr['name']])
+                ->add('last_name', TextType::class, ['mapped' => false, 'data' => $arr['last_name']])
+                ->add('phone_number', TelType::class, ['mapped' => false, 'required' => false, 'data' => $arr['phone_number']])
                 ->add('password', RepeatedType::class, [
                     'type' => PasswordType::class,
+                    'required' => false,
                     'mapped' => false
+                ])
+                ->add('protege', EntityType::class, [
+                    'class' => Protege::class,
+                    'choice_label' => 'id',
+                    'required' => false,
+                    'multiple' => true
                 ]);
             $form = $formBuilder->getForm();
         }
@@ -77,27 +90,34 @@ class ProtectorController extends AbstractController
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()){
 
-            //serwis tworzenia uzytkownika?
-            //TODO nowy i edycja - zmienic tworzenie uzytkownika
+            if($id){
+                dump($protector);
+                //istenijacy opiekun -> nadpisz dane
+                $user = $protector->getUser();
+                if($form->get("password")->getData()) 
+                    $user->setPassword($passwordHasher->hashPassword($user, $form->get("password")->getData()));
+            }
+            else{
+                //nowy uzytkownik
+                $user = new User();
+                $user->setPassword($passwordHasher->hashPassword($user, $form->get("password")->getData()));
+                $user->setRoles(['ROLE_PROTECTOR']);
+                $user->setProtector($protector);
+                $protector->setUser($user);
+            }
 
-            $protector = $form->getData();
-
-            //stworz uzytkownika
-            $user = new User();
+            $user->setEmail($form->get("email")->getData());
             $user->setName($form->get("name")->getData());
             $user->setLastName($form->get("last_name")->getData());
-            $user->setEmail($form->get("email")->getData());
-            $user->setPassword($passwordHasher->hashPassword($user, $form->get("password")->getData()));
-            $user->setRoles(['ROLE_PROTECTOR']);
-            $em->persist($user);
-            $em->flush();
+            $user->setPhoneNumber($form->get("phone_number")->getData());
 
-            $protector->setUser($user);
+            $em->persist($user);
             $em->persist($protector);
             $em->flush();
 
 
-            $this->addFlash('success', 'Dodanie nowego opiekuna przebiegło pomyślnie.');
+
+            $this->addFlash('success', 'Opiekun został zapisany pomyślnie.');
             return $this->redirectToRoute('admin_protectors');
         }
 

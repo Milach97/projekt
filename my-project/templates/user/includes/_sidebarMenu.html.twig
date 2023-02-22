@@ -18,7 +18,7 @@
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link {% if menuHighlight|default() == 'protegeHealth' %}active{% endif %}" href="{{ path('protege_health') }}">
+        <a class="nav-link {% if menuHighlight|default() == 'protectors' %}active{% endif %}" href="{{ path('protege_health') }}">
           <span data-feather="umbrella" class="align-text-bottom"></span>
           Opiekun
         </a>
@@ -60,7 +60,7 @@
 
       {# dla wszystkich uzytkownikow #}
       <li class="nav-item">
-        <a class="nav-link {% if menuHighlight|default() == 'statistics' %}active{% endif %}" href="#">
+        <a class="nav-link {% if menuHighlight|default() == 'statistics' %}active{% endif %}" href="{{ path('user_stats') }}">
           <span data-feather="bar-chart-2" class="align-text-bottom"></span>
           Statystyki
         </a>

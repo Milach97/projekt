@@ -8,11 +8,10 @@
         <h1 class="h2">Lista opiekunów</h1>
         <div class="btn-toolbar mb-2 mb-md-0">
           <div class="btn-group me-2">
-            {# TODO - do poprawy #}
-            {# <a class="btn btn-sm btn-outline-secondary" href="{{ path('admin_protectors_new') }}">
+            <a class="btn btn-sm btn-outline-secondary" href="{{ path('admin_protectors_new') }}">
               <span data-feather="plus" class="align-text-bottom"></span>
               Nowy opiekun
-            </a> #}
+            </a>
           </div>
         </div>
       </div>
@@ -38,10 +37,10 @@
               <td>{{ p.user.name ?? '-' }}</td>
               <td>{{ p.user.lastName ?? '-' }}</td>
               <td>
-                  <a class="btn btn-xs btn-secondary" href="{{ path('admin_users_edit', {'id':p.user.id} ) }}">
+                  {# <a class="btn btn-xs btn-secondary" href="{{ path('admin_users_edit', {'id':p.user.id} ) }}">
                     <span data-feather="edit" class="align-text-bottom"></span>
                     Edytuj
-                  </a>
+                  </a> #}
                   <a class="btn btn-xs btn-secondary" href="{{ path('admin_protectors_edit', {'id':p.id} ) }}">
                     <span data-feather="settings" class="align-text-bottom"></span>
                     Zarządzaj

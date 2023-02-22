@@ -3,7 +3,6 @@ var Html = {
     PulsesList: function(pulses) {
         var list = '';
         $.each(pulses, function(index, pulse){
-            //console.log(pulse.value);
             list += '<li><a><img src="img/pulse.png"><h2>Wartość: <small>'+pulse.value+'</small></h2><p>'+pulse.datetime.date+'</p></a></li>';
         });
 

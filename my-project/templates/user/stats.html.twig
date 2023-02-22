@@ -1,0 +1,66 @@
+{% extends 'user/base.html.twig' %}
+
+{% block additionalStyles %}
+    <style>
+        .row{
+            margin-top: 15px;
+            margin-bottom: 15px;
+            padding-top: 15px;
+            padding-bottom: 15px;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+{% endblock %}
+
+{% block main %}
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            <h1 class="h2">Statystyki</h1>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-striped table-sm">
+                {% if protectorCount %}
+                    <tr>
+                        <th>Liczba opiekunów:</th>
+                        <td>{{ protectorCount ?? '-' }}</td>
+                    <tr>
+                {% endif %}
+                {% if protegeCount %}
+                    <tr>
+                        <th>Liczba podopiecznych:</th>
+                        <td>{{ protegeCount ?? '-' }}</td>
+                    <tr>
+                {% endif %}
+                {% if userCount %}
+                    <tr>
+                        <th>Liczba użytkowników:</th>
+                        <td>{{ userCount ?? '-' }}</td>
+                    <tr>
+                {% endif %}
+            </table>
+        </div>
+
+        {# wykres #}
+        <div class="card" id="dashboard-chart" data-path="{{ path('user_dashboard_chart') }}"></div> 
+
+    </main>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        $(document).ready(function() {
+            loadComponent('dashboard-chart');
+        });
+
+        function loadComponent(containerId) {
+            var route = $('#'+containerId).attr('data-path');
+
+                $.get(route, function(response){ 
+                    $('#'+containerId).html(response);
+                    
+            });
+        }
+    </script>
+{% endblock %}
+

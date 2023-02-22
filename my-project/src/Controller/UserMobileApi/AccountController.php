@@ -41,7 +41,7 @@ class AccountController extends AbstractController
         //spr czy timestamp jest aktualny ( nie starszy niz 2 minuty)
         if((time() - $timestamp) < 120) {     //120 seconds
 
-
+            $email = urldecode($email);
             //znajdz uzytkownika po podanym emailu
             $user = $em->getRepository(User::class)->findOneBy(array('email' => $email));
             if(!$user)

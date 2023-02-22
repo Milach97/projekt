@@ -179,7 +179,7 @@ class UserDashboardController extends AbstractController
                     ->getQuery()
                     ->getSingleScalarResult();
 
-                $saturationCount = $em->getRepository(Weight::class)->createQueryBuilder('s')
+                $saturationCount = $em->getRepository(Saturation::class)->createQueryBuilder('s')
                     ->select('count(s.id)')
                     ->where("s.protege IN (:proteges)")
                     ->setParameter('proteges', $proteges)
