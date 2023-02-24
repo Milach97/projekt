@@ -3,7 +3,8 @@
 namespace App\Controller\User;
 
 use App\Service\UserService;
-use App\Form\User\UserPasswordType;
+use App\Form\User\PasswordType;
+
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -43,7 +44,8 @@ class AccountController extends AbstractController
         $user = $this->getUser();
 
         //formularz do FORM
-        $form = $this->createForm(UserPasswordType::class);
+        $form = $this->createForm(PasswordType::class);
+
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()){
 

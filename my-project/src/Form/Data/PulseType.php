@@ -18,7 +18,9 @@ class PulseType extends AbstractType
     {
         $builder
             ->add('value', IntegerType::class)
-            ->add('datetime', DateTimeType::class)
+            ->add('datetime', DateTimeType::class, [
+                'data' => new \DateTime()
+                ])
         ;
     }
 

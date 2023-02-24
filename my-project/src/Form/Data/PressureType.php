@@ -19,7 +19,9 @@ class PressureType extends AbstractType
         $builder
             ->add('systolicPressure', NumberType::class)
             ->add('diastolicPressure', NumberType::class)
-            ->add('datetime', DateTimeType::class)
+            ->add('datetime', DateTimeType::class, [
+                'data' => new \DateTime()
+                ])
         ;
     }
 

@@ -9,7 +9,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use App\Entity\User;
 use App\Entity\Protege;
-use App\Entity\Data\Disease;
+
 use App\Entity\Data\Pressure;
 use App\Entity\Data\Pulse;
 use App\Entity\Data\Saturation;
@@ -51,9 +51,6 @@ class ProtegeController extends AbstractController
         if(!$this->getUser()->getProtector()->getProtege()->contains($protege))
             throw $this->createNotFoundException('Not allowed. ');
 
-        //pobierz ostatnie 10 nanjowszych zapisanych chorob
-        $protegeDiseaseRecords = $em->getRepository(Disease::class)->findBy(['protege' => $protege], ['isChronic' => 'ASC', 'startDate' => 'DESC'], 10);            
-        
         //pobierz ostatnie 10 nanjowszych zapisow cisnienia
         $protegePressureRecords = $em->getRepository(Pressure::class)->findBy(['protege' => $protege], ['datetime' => 'DESC'], 10);            
         
@@ -69,7 +66,6 @@ class ProtegeController extends AbstractController
         return $this->render('user/protector/proteges/manage.html.twig', [
             'menuHighlight' => 'proteges',
             'protege' => $protege,
-            'protegeDiseaseRecords' => $protegeDiseaseRecords,
             'protegePressureRecords' => $protegePressureRecords,
             'protegePulsRecords' => $protegePulsRecords,
             'protegeSaturationRecords' => $protegeSaturationRecords,
@@ -78,4 +74,60 @@ class ProtegeController extends AbstractController
         ]);
     }
 
+
+    /**
+     * @Route("/zarzadzaj/{id<\d+>}/dane/puls", name="protector_proteges_manage_data_pulse")
+     */
+    public function dataPulseAction(Request $request, EntityManagerInterface $em, $id)
+    {
+        $protege = $em->getRepository(Protege::class)->find($id);
+        if(!$protege)
+            throw $this->createNotFoundException('Protege not found. '.'ID: '.$id);
+
+        $protegePulsRecords = $em->getRepository(Pulse::class)->findBy(['protege' => $protege], ['datetime' => 'DESC']);    
+        
+        
+        return $this->render('user/protector/proteges/data/pulse.html.twig', [
+            'menuHighlight' => 'proteges',
+            'protegePulsRecords' => $protegePulsRecords
+        ]);
+    }
+
+
+    /**
+     * @Route("/zarzadzaj/{id<\d+>}/dane/saturacja", name="protector_proteges_manage_data_saturation")
+     */
+    public function dataSaturationAction(Request $request, EntityManagerInterface $em, $id)
+    {
+        $protege = $em->getRepository(Protege::class)->find($id);
+        if(!$protege)
+            throw $this->createNotFoundException('Protege not found. '.'ID: '.$id);
+
+        $protegeSaturationRecords = $em->getRepository(Saturation::class)->findBy(['protege' => $protege], ['datetime' => 'DESC']);    
+        
+        
+        return $this->render('user/protector/proteges/data/saturation.html.twig', [
+            'menuHighlight' => 'proteges',
+            'protegeSaturationRecords' => $protegeSaturationRecords
+        ]);
+    }
+
+
+    /**
+     * @Route("/zarzadzaj/{id<\d+>}/dane/cisnienie", name="protector_proteges_manage_data_pressure")
+     */
+    public function dataPressureAction(Request $request, EntityManagerInterface $em, $id)
+    {
+        $protege = $em->getRepository(Protege::class)->find($id);
+        if(!$protege)
+            throw $this->createNotFoundException('Protege not found. '.'ID: '.$id);
+
+        $protegePressureRecords = $em->getRepository(Pressure::class)->findBy(['protege' => $protege], ['datetime' => 'DESC']);    
+        
+        
+        return $this->render('user/protector/proteges/data/pressure.html.twig', [
+            'menuHighlight' => 'proteges',
+            'protegePressureRecords' => $protegePressureRecords
+        ]);
+    }
 }

@@ -46,7 +46,9 @@ class ProtectorType extends AbstractType
             ->add('protege', EntityType::class, [
                 'class' => Protege::class,
                 'required' => false,
-                'choice_label' => 'id',
+                'choice_label' => function ($protege) {
+                    return $protege->getUser()->getName().' '.$protege->getUser()->getLastName();
+                },
                 'multiple' => true
             ])
         ;

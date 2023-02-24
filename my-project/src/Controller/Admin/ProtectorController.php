@@ -73,7 +73,9 @@ class ProtectorController extends AbstractController
                 ])
                 ->add('protege', EntityType::class, [
                     'class' => Protege::class,
-                    'choice_label' => 'id',
+                    'choice_label' => function ($protege) {
+                        return $protege->getUser()->getName().' '.$protege->getUser()->getLastName();
+                    },
                     'required' => false,
                     'multiple' => true
                 ]);
@@ -91,7 +93,6 @@ class ProtectorController extends AbstractController
         if($form->isSubmitted() && $form->isValid()){
 
             if($id){
-                dump($protector);
                 //istenijacy opiekun -> nadpisz dane
                 $user = $protector->getUser();
                 if($form->get("password")->getData()) 

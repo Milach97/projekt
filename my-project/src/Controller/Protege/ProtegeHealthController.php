@@ -16,7 +16,7 @@ use App\Service\ProtegeService;
 
 use App\Entity\User;
 use App\Entity\Protege;
-use App\Entity\Data\Disease;
+
 use App\Entity\Data\Pressure;
 use App\Entity\Data\Pulse;
 use App\Entity\Data\Saturation;
@@ -39,9 +39,6 @@ class ProtegeHealthController extends AbstractController
             throw $this->createNotFoundException('Protege not found. '.'User ID: '.$this->getUser()->getId());
 
 
-        //pobierz ostatnie 10 nanjowszych zapisanych chorob
-        $protegeDiseaseRecords = $em->getRepository(Disease::class)->findBy(['protege' => $protege], ['isChronic' => 'ASC', 'startDate' => 'DESC'], 10);            
-        
         //pobierz ostatnie 10 nanjowszych zapisow cisnienia
         $protegePressureRecords = $em->getRepository(Pressure::class)->findBy(['protege' => $protege], ['datetime' => 'DESC'], 10);            
         
@@ -58,7 +55,6 @@ class ProtegeHealthController extends AbstractController
         return $this->render('user/protege/protegeHealth.html.twig', [
             'menuHighlight' => 'protegeHealth',
             'protege' => $protege,
-            'protegeDiseaseRecords' => $protegeDiseaseRecords,
             'protegePressureRecords' => $protegePressureRecords,
             'protegePulsRecords' => $protegePulsRecords,
             'protegeSaturationRecords' => $protegeSaturationRecords,

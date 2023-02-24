@@ -17,10 +17,9 @@
         </div>
 
 
-        <h4>Edytuj</h4>
+        <h4>Edytuj użytkownika</h4>
         <div class="row">
             <div class="col-md-6 offset-md-3 ">
-                {#{{ form_start(form,{'attr': {'novalidate':'novalidate','class':'needs-validation'}}) }}#}
                 <form action="{{ path('admin_users_edit', {id: user.id}) }}" method="post">    
 
                     <div class="mb-3">

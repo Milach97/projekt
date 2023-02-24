@@ -1,0 +1,49 @@
+{% extends 'user/base.html.twig' %}
+
+{% block main %}
+    <div class="container-fluid">
+        <div class="row" style="margin:20px;">
+            <div class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <div class="card">
+
+                    <div class="card-content">
+                        <div class="card-header background-primary">
+                            <h3 class="title">Zapisane wartości pulsu</h3>
+                        </div>
+                    </div>
+
+                    <div class="card-content table-responsive" style="padding:10px;">                  
+                        <table class="table table-striped table-sm" id="myTable" style="padding:15px;">
+                            <thead class="text-primary">
+                                <th>Data</th>
+                                <th>Wartość</th>
+                            </thead>
+
+                            <tbody>
+                                {% for pulse in protegePulsRecords %}
+                                    <tr>
+                                        <td>{{ pulse.datetime ? pulse.datetime|date('Y-m-d H:i', 'Europe/Warsaw') : '-' }}</td>
+                                        <td>{{ pulse.value ?? '-' }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>      
+                    </div>      
+
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+
+    <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.2/js/jquery.dataTables.js"></script>
+<script>
+$(document).ready( function () {
+    $('#myTable').DataTable();
+} );
+</script>
+{% endblock %}

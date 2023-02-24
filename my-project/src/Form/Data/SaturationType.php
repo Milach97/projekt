@@ -18,7 +18,9 @@ class SaturationType extends AbstractType
     {
         $builder
             ->add('value', NumberType::class)
-            ->add('datetime', DateTimeType::class)
+            ->add('datetime', DateTimeType::class, [
+                'data' => new \DateTime()
+                ])
         ;
     }
 

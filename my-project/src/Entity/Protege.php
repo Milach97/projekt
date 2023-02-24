@@ -2,7 +2,7 @@
 
 namespace App\Entity;
 
-use App\Entity\Data\Disease;
+
 use App\Entity\Data\Pressure;
 use App\Entity\Data\Pulse;
 use App\Entity\Data\Saturation;
@@ -42,8 +42,6 @@ class Protege
     #[ORM\OneToMany(mappedBy: 'protege', targetEntity: Pressure::class, orphanRemoval: true)]
     private Collection $pressures;
 
-    #[ORM\OneToMany(mappedBy: 'protege', targetEntity: Disease::class, orphanRemoval: true)]
-    private Collection $diseases;
 
     #[ORM\ManyToMany(targetEntity: Protector::class, mappedBy: 'protege')]
     private Collection $protector;
@@ -55,7 +53,6 @@ class Protege
         $this->saturations = new ArrayCollection();
         $this->weights = new ArrayCollection();
         $this->pressures = new ArrayCollection();
-        $this->diseases = new ArrayCollection();
         $this->protector = new ArrayCollection();
     }
 
@@ -220,35 +217,7 @@ class Protege
         return $this;
     }
 
-    /**
-     * @return Collection<int, Disease>
-     */
-    public function getDiseases(): Collection
-    {
-        return $this->diseases;
-    }
 
-    public function addDisease(Disease $disease): self
-    {
-        if (!$this->diseases->contains($disease)) {
-            $this->diseases->add($disease);
-            $disease->setProtege($this);
-        }
-
-        return $this;
-    }
-
-    public function removeDisease(Disease $disease): self
-    {
-        if ($this->diseases->removeElement($disease)) {
-            // set the owning side to null (unless already changed)
-            if ($disease->getProtege() === $this) {
-                $disease->setProtege(null);
-            }
-        }
-
-        return $this;
-    }
 
     /**
      * @return Collection<int, Protector>
