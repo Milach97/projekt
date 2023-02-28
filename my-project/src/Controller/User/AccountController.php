@@ -3,7 +3,7 @@
 namespace App\Controller\User;
 
 use App\Service\UserService;
-use App\Form\User\PasswordType;
+use App\Form\User\ChangePasswordType;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -44,15 +44,17 @@ class AccountController extends AbstractController
         $user = $this->getUser();
 
         //formularz do FORM
-        $form = $this->createForm(PasswordType::class);
+        $form = $this->createForm(ChangePasswordType::class);
+        //$form = $this->createForm($user);
 
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()){
 
             $arr = $form->getData();
+            dump($arr);
 
             //sprawdzenie czy stare haslo jest zgodne
-            if (!$passwordHasher->isPasswordValid($user, $arr['oldPassword'])) {
+            if (!$passwordHasher->isPasswordValid($user, $arr['password'])) {
                 $this->addFlash('error', 'Błędnie wprowadzono stare hasło.');
                 return $this->redirectToRoute('user_account_passwordChange');
             }
@@ -115,6 +117,7 @@ class AccountController extends AbstractController
 
         return $this->render('user/accountPasswordChange.html.twig', [
             'form' => $form->createView(),
+            'menuHighlight' => 'account',
             'error'=> ''
         ]);
     }
